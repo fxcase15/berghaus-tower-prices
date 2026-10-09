@@ -1,0 +1,728 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style></head><body>
+<title>Berghaus Tower Prices</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112,500;112,700;125,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#ECEEEA; --panel:#F8F9F6; --ink:#16201D; --ink-2:#4B5651; --muted:#717B76; --line:#D2D7D1;
+  --accent:#5B3F94; --lilac:#CDB8DE; --salmon:#F1AFA8; --redline:#C8372D;
+  --cool:#2a78d6; --mid:#E4E3DF; --warm:#e34948; --unsold:#C3C8C2;
+  --g1:#2a78d6; --g2:#eb6834; --g3:#1baf7a;
+  --seq0:#cde2fb; --seq1:#0d366b;
+  --display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#111614; --panel:#1A201E; --ink:#EDF1EE; --ink-2:#B9C2BD; --muted:#8A948F; --line:#2E3633;
+    --accent:#B99DE6; --lilac:#4B3F5E; --salmon:#7A4A46; --redline:#E2665C;
+    --cool:#3987e5; --mid:#383835; --warm:#e66767; --unsold:#38403D;
+    --g1:#3987e5; --g2:#d95926; --g3:#199e70;
+    --seq0:#184f95; --seq1:#cde2fb;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#111614; --panel:#1A201E; --ink:#EDF1EE; --ink-2:#B9C2BD; --muted:#8A948F; --line:#2E3633;
+  --accent:#B99DE6; --lilac:#4B3F5E; --salmon:#7A4A46; --redline:#E2665C;
+  --cool:#3987e5; --mid:#383835; --warm:#e66767; --unsold:#38403D;
+  --g1:#3987e5; --g2:#d95926; --g3:#199e70;
+  --seq0:#184f95; --seq1:#cde2fb;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:1280px;margin:0 auto;padding-inline:20px;padding-block:28px 64px;display:grid;gap:36px}
+header{display:grid;gap:10px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--display);font-stretch:125%;font-weight:800;font-size:clamp(30px,5vw,54px);line-height:1;margin:0;letter-spacing:-.01em;text-wrap:balance}
+h2{font-family:var(--display);font-stretch:112%;font-weight:700;font-size:22px;margin:0;text-wrap:balance}
+h3{font-family:var(--display);font-stretch:112%;font-weight:700;font-size:16px;margin:0}
+.lede{max-width:68ch;color:var(--ink-2);margin:0}
+.kpis{display:flex;flex-wrap:wrap;gap:28px;margin-top:6px}
+.kpi{display:grid;gap:0}
+.kpi b{font-family:var(--mono);font-weight:500;font-size:22px;font-variant-numeric:tabular-nums}
+.kpi span{font-size:12px;color:var(--muted)}
+
+/* viewer */
+.viewer{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:0;background:var(--panel);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.stage{position:relative;height:min(72vh,660px);min-height:420px;border-right:1px solid var(--line)}
+.stage canvas{display:block;width:100%;height:100%;cursor:grab;touch-action:none}
+.stage canvas:active{cursor:grabbing}
+.toolbar{position:absolute;left:12px;top:12px;right:12px;display:flex;flex-wrap:wrap;gap:8px;pointer-events:none}
+.toolbar > *{pointer-events:auto}
+.seg{display:inline-flex;background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:2px;gap:2px;flex-wrap:wrap}
+.seg button{font:500 12px var(--body);color:var(--ink-2);background:none;border:0;padding:5px 9px;border-radius:3px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--panel);color:var(--ink);box-shadow:0 0 0 1px var(--line)}
+.seg button:focus-visible,.chip:focus-visible,th button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.floors{position:absolute;left:12px;bottom:12px;display:flex;flex-direction:column-reverse;gap:3px}
+.floors button{font:500 11px var(--mono);width:40px;padding:4px 0;background:var(--bg);border:1px solid var(--line);color:var(--ink-2);border-radius:3px;cursor:pointer}
+.floors button[aria-pressed="true"]{background:var(--accent);color:var(--panel);border-color:var(--accent)}
+.opts{position:absolute;right:12px;bottom:12px;display:flex;flex-direction:column;gap:6px;align-items:flex-end;font-size:12px;color:var(--ink-2)}
+.opts label{display:flex;align-items:center;gap:6px;background:var(--bg);border:1px solid var(--line);padding:4px 8px;border-radius:4px;cursor:pointer}
+.opts input[type=range]{width:90px;accent-color:var(--accent)}
+.hint{font-size:11px;color:var(--muted);text-align:right;line-height:1.35}
+.seg .lbl{font:600 11px var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:5px 6px 5px 8px;align-self:center}
+#typeChips button{font-family:var(--mono)}
+#typeChips button[aria-pressed="true"]:not([data-t="all"]){background:var(--accent);color:var(--panel);box-shadow:none}
+.chip{font:500 12px var(--body);color:var(--accent);background:none;border:1px solid var(--accent);border-radius:99px;padding:4px 11px;cursor:pointer;width:max-content}
+.chip:hover{background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.compare{display:grid;gap:10px;border-top:1px solid var(--line);padding-top:16px}
+.compare table{min-width:0;font-size:12px}
+.compare th,.compare td{padding:4px 5px}
+.compare th{font:600 10px var(--body);letter-spacing:.05em;text-transform:uppercase;color:var(--muted);position:static}
+.compare td:nth-child(3),.compare th:nth-child(3){text-align:right}
+.filternote{font-size:13px;color:var(--ink-2)}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--panel);font-size:12px;padding:6px 9px;border-radius:4px;line-height:1.35;white-space:nowrap;transform:translate(12px,12px);z-index:3}
+.tip b{font-family:var(--mono);font-weight:500}
+
+.side{padding:18px;display:grid;gap:18px;align-content:start;overflow:auto;max-height:min(72vh,660px)}
+.legend{display:grid;gap:6px}
+.ramp{height:10px;border-radius:2px}
+.ramp-labels{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.swatches{display:grid;gap:4px;font-size:12px;color:var(--ink-2)}
+.swatches div{display:flex;align-items:center;gap:8px}
+.sw{width:12px;height:12px;border-radius:2px;flex:none}
+.find{display:flex;gap:6px}
+.find input{flex:1;min-width:0;font:500 14px var(--mono);padding:7px 9px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink)}
+.card{display:grid;gap:10px;border-top:1px solid var(--line);padding-top:16px}
+.card .num{font-family:var(--display);font-stretch:125%;font-weight:800;font-size:40px;line-height:1}
+.card .sub{font-size:13px;color:var(--ink-2)}
+dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:0;font-size:13px}
+dt{color:var(--muted)}
+dd{margin:0;font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right}
+.pill{display:inline-flex;align-items:center;gap:6px;font:500 12px var(--mono);padding:3px 8px;border-radius:99px;border:1px solid var(--line);width:max-content}
+.pill i{width:8px;height:8px;border-radius:50%;display:block}
+.empty{font-size:13px;color:var(--muted)}
+
+/* findings */
+.findings{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:28px}
+.finding{display:grid;gap:6px;align-content:start}
+.finding .big{font-family:var(--mono);font-size:26px;font-weight:500;font-variant-numeric:tabular-nums}
+.finding p{margin:0;color:var(--ink-2);font-size:14px}
+
+.charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:20px}
+.chart{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:16px;display:grid;gap:8px;position:relative}
+.chart p{margin:0;font-size:13px;color:var(--ink-2)}
+.chart svg{width:100%;height:auto;display:block;overflow:visible}
+.chart text{font-family:var(--mono);font-size:10.5px;fill:var(--muted)}
+.chart .lab{fill:var(--ink-2)}
+.ctip{position:absolute;pointer-events:none;background:var(--ink);color:var(--panel);font-size:12px;padding:5px 8px;border-radius:4px;white-space:nowrap;z-index:2}
+.leg{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--ink-2)}
+.leg span{display:flex;align-items:center;gap:6px}
+
+.tablewrap{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:6px}
+table{border-collapse:collapse;width:100%;font-size:13px;min-width:860px}
+th,td{padding:7px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child,td:first-child,th:nth-child(3),td:nth-child(3){text-align:left}
+th{position:sticky;top:0;background:var(--panel)}
+th button{all:unset;cursor:pointer;font:600 11px var(--body);letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+th button[data-dir]{color:var(--ink)}
+td{font-family:var(--mono);font-variant-numeric:tabular-nums}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:var(--bg)}
+tr.sel{background:color-mix(in srgb,var(--accent) 12%,transparent)!important}
+td.est{color:var(--muted);font-style:italic}
+.dev{display:inline-flex;align-items:center;gap:6px}
+.dev i{display:block;width:8px;height:8px;border-radius:2px}
+.notes{max-width:78ch;color:var(--ink-2);font-size:13px;display:grid;gap:8px}
+.notes p{margin:0}
+
+@media (max-width:860px){
+  .viewer{grid-template-columns:1fr}
+  .stage{border-right:0;border-bottom:1px solid var(--line);height:62vh;min-height:380px}
+  .side{max-height:none}
+  .hint{display:none}
+}
+@media (max-width:480px){.wrap{padding-inline:16px}.charts{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Koningin Wilhelminaplein · 1062 LE Amsterdam · Berghaus complex A6, east tower · floors 5–12</div>
+    <h1>Berghaus Tower Prices</h1>
+    <p class="lede">Every apartment in the tower, built from the NEN 2580 floor plans and matched to the Kadaster transfer records. Colour shows how each sale compares with what its type, floor and timing predict, so units that sold cheap or expensive for their kind stand out.</p>
+    <div class="kpis" id="kpis"></div>
+  </header>
+
+  <section class="viewer" aria-label="3D building model">
+    <div class="stage" id="stage">
+      <div class="toolbar">
+        <div class="seg" role="group" aria-label="Colour by" id="modes">
+          <button data-mode="dev" aria-pressed="true">Vs. model</button>
+          <button data-mode="ppm" aria-pressed="false">€ / m²</button>
+          <button data-mode="price" aria-pressed="false">Price</button>
+          <button data-mode="group" aria-pressed="false">Layout type</button>
+          <button data-mode="date" aria-pressed="false">Transfer date</button>
+          <button data-mode="glass" aria-pressed="false">Façade length</button>
+        </div>
+        <div class="seg" role="group" aria-label="Compare apartment types" id="typeChips"></div>
+      </div>
+      <div class="floors" id="floors" aria-label="Isolate a floor"></div>
+      <div class="opts">
+        <div class="hint">Drag to rotate · scroll or pinch to zoom<br>Click a unit for details</div>
+        <label for="explode">Separate floors <input type="range" id="explode" min="0" max="100" value="0"></label>
+        <label for="glazing"><input type="checkbox" id="glazing"> Show glass façades</label>
+      </div>
+      <div class="tip" id="tip" hidden></div>
+    </div>
+    <aside class="side">
+      <div class="legend" id="legend"></div>
+      <div class="find">
+        <input id="findInput" inputmode="numeric" placeholder="Find house no., e.g. 205" aria-label="Find house number">
+      </div>
+      <div class="card" id="card"><p class="empty">Select a unit in the model or the table to see its numbers.</p></div>
+      <div class="compare" id="compare" hidden></div>
+    </aside>
+  </section>
+
+  <section style="display:grid;gap:18px">
+    <h2>What drives the price</h2>
+    <div class="findings" id="findings"></div>
+  </section>
+
+  <section class="charts">
+    <div class="chart" id="chFloor">
+      <h3>Price per m² by floor</h3>
+      <p>Each dot is a recorded sale. Higher floors sell for more per m² within every layout group.</p>
+      <div class="leg" id="legFloor"></div>
+      <svg id="svgFloor" viewBox="0 0 420 260" role="img" aria-label="Scatter of price per square metre against floor"></svg>
+    </div>
+    <div class="chart" id="chModel">
+      <h3>Actual price vs. model</h3>
+      <p>Dots above the line sold for more than the model expects, dots below sold for less.</p>
+      <div class="leg" id="legModel"></div>
+      <svg id="svgModel" viewBox="0 0 420 260" role="img" aria-label="Actual sale price against model estimate"></svg>
+    </div>
+    <div class="chart" id="chType">
+      <h3>Average € / m² by apartment type</h3>
+      <p>The big duplexes are cheapest per m². Corner flats and the small side flats cost about the same per m². Click a bar to compare that type.</p>
+      <svg id="svgType" viewBox="0 0 420 260" role="img" aria-label="Average price per square metre by type"></svg>
+    </div>
+  </section>
+
+  <section style="display:grid;gap:12px">
+    <h2>All 80 units</h2>
+    <p class="lede" style="font-size:14px">Units without a recorded transfer show a model estimate in grey italics. Click a column to sort, or a row to find the unit in the model.</p>
+    <div class="filternote" id="tblNote" hidden></div>
+    <div class="tablewrap"><table id="tbl"><thead></thead><tbody></tbody></table></div>
+  </section>
+
+  <section class="notes" id="support">
+    <h3>Support this page</h3>
+    <p>This page is free. If it helped you, you can buy us a coffee: <a class="chip" href="DONATION_LINK" target="_blank" rel="noopener">Donate</a></p>
+  </section>
+
+  <section class="notes">
+    <h3>How this was built</h3>
+    <p><b>Sources.</b> Areas are NEN 2580 usable floor areas (GBO) from <i>NEN2580 type B meting Bergaus A6</i>. Sale prices and dates come from Kadaster <i>koopsominformatie</i> for postcode 1062 LE (49 transfers, Jul 2025 – Aug 2026). The 80 units match the 80 apartment rights (272–351) on floors 5–12 in <i>Concept splitsingstekening A6</i>.</p>
+    <p><b>Duplexes.</b> W3/W3A and W4 span two floors. Their area is the sum of both levels, for example W3 = 34.15 m² entrance level + 68.07 m² upper level. For the model they count as the floor in between (e.g. 7.5).</p>
+    <p><b>Model.</b> An ordinary least-squares fit of € per m² on apartment type, floor and months since July 2025, computed live from the 49 sales. "Vs. model" is the sale price relative to that fit.</p>
+    <p><b>Façade length.</b> This is the exterior wall length of each unit in the simplified 3D model, used as a stand-in for glass. It is approximate (about ±1 m), and the rounded glass corners are drawn as square.</p>
+    <p><b>Timing.</b> Dates are notarial transfer dates. For new-build units the price was usually fixed earlier at contract signing, so the date effect understates real market movement.</p>
+  </section>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(function(){
+const RAW = [[117,"W1",5,63.79,"TR",638100,"2025-11-21"],[119,"W3A",5,99.94,"R0",null,null],[121,"W3",5,101.57,"R1",null,null],[123,"W3",5,101.57,"R2",null,null],[125,"W3A",5,99.94,"R3",null,null],[127,"W3A",5,99.94,"R4",null,null],[129,"W3",5,101.57,"R5",null,null],[131,"W3",5,101.57,"R6",null,null],[133,"W3A",5,99.94,"R7",null,null],[135,"W5",5,63.82,"BR",656000,"2026-03-20"],[137,"W4",5,94.85,"BR",null,null],[139,"W4",5,94.85,"BL",null,null],[141,"W5",5,63.82,"BL",638100,"2025-12-04"],[143,"W6F",5,51.11,"L3",510100,"2026-02-16"],[145,"W6F",5,51.11,"L2",510000,"2025-09-05"],[147,"W6F",5,51.11,"L1",510000,"2025-08-29"],[149,"W6F",5,51.11,"L0",515000,"2025-12-16"],[151,"W1",5,63.79,"TL",638000,"2025-08-13"],[153,"W1",6,63.79,"TL",641000,"2025-08-20"],[155,"W1",6,63.63,"TR",640000,"2025-10-20"],[157,"W1A",7,59.26,"TR",582500,"2026-02-23"],[159,"W3A",7,100.59,"R0",835000,"2026-07-03"],[161,"W3",7,102.22,"R1",795000,"2026-08-14"],[163,"W3",7,102.22,"R2",null,null],[165,"W3A",7,100.59,"R3",null,null],[167,"W3A",7,100.59,"R4",null,null],[169,"W3",7,102.22,"R5",null,null],[171,"W3",7,102.22,"R6",null,null],[173,"W3A",7,100.59,"R7",null,null],[175,"W5",7,63.82,"BR",650000,"2025-11-28"],[177,"W4",7,94.85,"BR",835000,"2026-06-26"],[179,"W4",7,94.85,"BL",null,null],[181,"W5",7,63.82,"BL",640000,"2025-09-29"],[183,"W6F",7,51.11,"L3",525000,"2026-04-13"],[185,"W6F",7,51.11,"L2",515000,"2025-09-22"],[187,"W6F",7,51.11,"L1",521000,"2025-12-15"],[189,"W6F",7,51.11,"L0",525000,"2025-11-26"],[191,"W1",7,63.79,"TL",649500,"2025-10-02"],[193,"W1",8,63.79,"TL",650000,"2025-07-31"],[195,"W1A",8,59.26,"TR",565000,"2025-12-10"],[197,"W1A",9,59.26,"TR",575000,"2025-12-29"],[199,"W3A",9,100.59,"R0",810000,"2026-05-15"],[201,"W3",9,102.22,"R1",null,null],[203,"W3",9,102.22,"R2",null,null],[205,"W3A",9,100.59,"R3",830000,"2026-03-25"],[207,"W3A",9,100.59,"R4",null,null],[209,"W3",9,102.22,"R5",null,null],[211,"W3",9,102.22,"R6",null,null],[213,"W3A",9,100.59,"R7",null,null],[215,"W5",9,63.82,"BR",655000,"2025-11-27"],[217,"W4",9,94.85,"BR",null,null],[219,"W4",9,94.85,"BL",890000,"2025-12-05"],[221,"W5",9,63.82,"BL",655000,"2025-08-15"],[223,"W6F",9,51.11,"L3",530000,"2025-12-15"],[225,"W6F",9,51.11,"L2",541100,"2025-10-15"],[227,"W6F",9,51.11,"L1",530000,"2025-09-02"],[229,"W6F",9,51.11,"L0",530000,"2025-08-15"],[231,"W1",9,63.79,"TL",672000,"2025-10-20"],[233,"W1",10,63.79,"TL",660000,"2025-09-04"],[235,"W1A",10,59.26,"TR",null,null],[237,"W1A",11,59.26,"TR",595000,"2025-10-14"],[239,"W3A",11,100.59,"R0",null,null],[241,"W3",11,102.22,"R1",null,null],[243,"W3",11,102.22,"R2",null,null],[245,"W3A",11,100.59,"R3",855000,"2025-10-08"],[247,"W3A",11,100.59,"R4",840000,"2026-04-13"],[249,"W3",11,102.22,"R5",null,null],[251,"W3",11,102.22,"R6",815000,"2026-07-29"],[253,"W3A",11,100.59,"R7",null,null],[255,"W5",11,63.82,"BR",670000,"2025-10-13"],[257,"W4",11,94.85,"BR",null,null],[259,"W4",11,94.85,"BL",900000,"2025-10-16"],[261,"W5",11,63.82,"BL",660000,"2025-09-08"],[263,"W6F",11,51.11,"L3",535000,"2026-04-07"],[265,"W6F",11,51.11,"L2",540265,"2025-12-31"],[267,"W6F",11,51.11,"L1",541000,"2025-09-26"],[269,"W6F",11,51.11,"L0",570000,"2026-03-18"],[271,"W1",11,63.79,"TL",660000,"2025-08-28"],[273,"W1",12,63.79,"TL",665000,"2025-08-01"],[275,"W1A",12,59.26,"TR",590000,"2026-02-11"]]
+;
+const TODAY = new Date('2026-10-06');
+const T0 = new Date('2025-07-01');
+const months = d => (d - T0) / (1000*60*60*24*30.4375);
+const DUPLEX = new Set(['W3','W3A','W4']);
+const GROUPS = {corner:{label:'Corner flat (W1, W1A, W5)',key:'--g1'}, side:{label:'Side flat (W6F)',key:'--g2'}, duplex:{label:'Duplex (W3, W3A, W4)',key:'--g3'}};
+const groupOf = t => DUPLEX.has(t) ? 'duplex' : (t==='W6F' ? 'side' : 'corner');
+const TYPE_DESC = {
+  W1:'Corner flat at the lift-lobby end, rounded glass corner, two façades',
+  W1A:'Corner flat at the lift-lobby end, slightly smaller with a shaft notch, two façades',
+  W5:'Corner flat at the far end of the tower, rounded glass corner, two façades',
+  W6F:'Single-level flat on the inner side, one façade',
+  W3:'Duplex: entrance level on the outer side, upper level runs the full depth with glass on both sides',
+  W3A:'Duplex (mirrored stair): entrance level on the outer side, full-depth upper level, slightly smaller top floor',
+  W4:'Corner duplex at the far end: small entrance level, large two-façade corner upper level'
+};
+
+// ---------- units ----------
+const units = RAW.map(([n,type,floor,area,pos,price,date]) => {
+  const u = {n,type,floor,area,pos,price,date: date? new Date(date):null};
+  u.duplex = DUPLEX.has(type);
+  u.floorEff = u.duplex ? floor + 0.5 : floor;
+  u.group = groupOf(type);
+  u.ppm = price ? price/area : null;
+  return u;
+});
+const byN = new Map(units.map(u=>[u.n,u]));
+
+// ---------- geometry (schematic, ~metres) ----------
+const H = 3.1, XE = 7.4, XM = 6.6, ZE = 19, ZM = 11.5;
+function boxesFor(u){
+  const f = u.floor, b = [];
+  const band = (i,n,len) => [-ZM + i*len, -ZM + (i+1)*len];
+  if (u.pos==='TL') b.push({f, x:[-XE,-1.1], z:[-ZE,-ZM]});
+  if (u.pos==='TR') b.push({f, x:[1.1,XE], z:[-ZE,-ZM]});
+  if (u.type==='W5') b.push({f, x: u.pos==='BL'?[-XE,-1.1]:[1.1,XE], z:[ZM,ZE]});
+  if (u.type==='W4'){
+    b.push({f, x: u.pos==='BL'?[-2.6,-1.1]:[1.1,2.6], z:[ZM,14], small:true});
+    b.push({f:f+1, x: u.pos==='BL'?[-XE,-1.1]:[1.1,XE], z:[ZM,ZE]});
+  }
+  if (u.type==='W6F'){ const i=+u.pos.slice(1), z=band(i,4,(2*ZM)/4); b.push({f, x:[-XM,-0.9], z}); }
+  if (u.type==='W3'||u.type==='W3A'){
+    const i=+u.pos.slice(1), z=band(i,8,(2*ZM)/8);
+    b.push({f, x:[0.9,XM], z}); b.push({f:f+1, x:[-XM,XM], z});
+  }
+  return b;
+}
+// the tower's four outer corners are rounded (glass corners in the plans)
+const R = 3.2;
+function cornerRadii(b){
+  const r={};
+  if (b.small) return r;
+  if (b.x[0]<=-XE+0.01 && b.z[0]<=-ZE+0.01) r.x0z0=R;
+  if (b.x[1]>=XE-0.01 && b.z[0]<=-ZE+0.01) r.x1z0=R;
+  if (b.x[0]<=-XE+0.01 && b.z[1]>=ZE-0.01) r.x0z1=R;
+  if (b.x[1]>=XE-0.01 && b.z[1]>=ZE-0.01) r.x1z1=R;
+  return r;
+}
+const ARC = {x0z0:{a0:Math.PI,c:(x,z,r)=>[x[0]+r,z[0]+r]}, x1z0:{a0:1.5*Math.PI,c:(x,z,r)=>[x[1]-r,z[0]+r]},
+             x1z1:{a0:0,c:(x,z,r)=>[x[1]-r,z[1]-r]}, x0z1:{a0:0.5*Math.PI,c:(x,z,r)=>[x[0]+r,z[1]-r]}};
+function exteriorFaces(bx){
+  const faces=[], [x0,x1]=bx.x, [z0,z1]=bx.z, r=cornerRadii(bx);
+  const outerX = (bx.z[0]>=-ZM-0.01 && bx.z[1]<=ZM+0.01) ? XM : XE;
+  const push=(axis,at,from,to,n)=>{if(to-from>0.05)faces.push({axis,at,from,to,n,len:to-from});};
+  if (x0<=-outerX+0.01) push('x',x0,z0+(r.x0z0||0),z1-(r.x0z1||0),-1);
+  if (x1>=outerX-0.01) push('x',x1,z0+(r.x1z0||0),z1-(r.x1z1||0),1);
+  if (z0<=-ZE+0.01) push('z',z0,x0+(r.x0z0||0),x1-(r.x1z0||0),-1);
+  if (z1>=ZE-0.01) push('z',z1,x0+(r.x0z1||0),x1-(r.x1z1||0),1);
+  for (const k in r){ const [cx,cz]=ARC[k].c(bx.x,bx.z,r[k]); faces.push({arc:true,cx,cz,a0:ARC[k].a0,r:r[k],len:Math.PI*r[k]/2}); }
+  // end-block side walls that stick out beyond the middle section
+  if (!bx.small && (z1<=-ZM+0.01 || z0>=ZM-0.01)){
+    const zEdge = z1<=-ZM+0.01 ? z1 : z0, n = z1<=-ZM+0.01 ? 1 : -1;
+    if (x0<=-XM) push('z',zEdge,x0,-XM,n);
+    if (x1>=XM) push('z',zEdge,XM,x1,n);
+  }
+  return faces;
+}
+function roundedShape(x0,x1,z0,z1,r){
+  const pts=[], seg=12;
+  const arc=(k)=>{const [cx,cz]=ARC[k].c([x0,x1],[z0,z1],r[k]);for(let i=0;i<=seg;i++){const a=ARC[k].a0+i*(Math.PI/2)/seg;pts.push([cx+r[k]*Math.cos(a),cz+r[k]*Math.sin(a)]);}};
+  r.x0z0? arc('x0z0') : pts.push([x0,z0]);
+  r.x1z0? arc('x1z0') : pts.push([x1,z0]);
+  r.x1z1? arc('x1z1') : pts.push([x1,z1]);
+  r.x0z1? arc('x0z1') : pts.push([x0,z1]);
+  return new THREE.Shape(pts.map(([x,z])=>new THREE.Vector2(x,-z)));
+}
+units.forEach(u=>{
+  u.boxes = boxesFor(u);
+  u.facade = u.boxes.reduce((s,b)=>s+exteriorFaces(b).reduce((a,f)=>a+f.len,0),0);
+});
+
+// ---------- model: ppm ~ type + floor + months ----------
+const TYPES = ['W1','W1A','W3','W3A','W4','W5','W6F'];
+const BASE = 'W6F', DUMMIES = TYPES.filter(t=>t!==BASE);
+const feat = (u,d) => [1, ...DUMMIES.map(t=>u.type===t?1:0), u.floorEff, months(d)];
+const sold = units.filter(u=>u.price);
+function ols(X,y){
+  const k=X[0].length, A=Array.from({length:k},()=>new Array(k+1).fill(0));
+  X.forEach((r,i)=>{for(let a=0;a<k;a++){for(let b=0;b<k;b++)A[a][b]+=r[a]*r[b];A[a][k]+=r[a]*y[i];}});
+  for(let c=0;c<k;c++){let p=c;for(let r=c+1;r<k;r++)if(Math.abs(A[r][c])>Math.abs(A[p][c]))p=r;[A[c],A[p]]=[A[p],A[c]];
+    for(let r=0;r<k;r++){if(r===c)continue;const m=A[r][c]/A[c][c];for(let j=c;j<=k;j++)A[r][j]-=m*A[c][j];}}
+  return A.map((r,i)=>r[k]/r[i]);
+}
+const beta = ols(sold.map(u=>feat(u,u.date)), sold.map(u=>u.ppm));
+const predPpm = (u,d) => feat(u,d).reduce((s,x,i)=>s+x*beta[i],0);
+units.forEach(u=>{
+  u.estPpmNow = predPpm(u,TODAY); u.estNow = u.estPpmNow*u.area;
+  if (u.price){ u.modelPpm = predPpm(u,u.date); u.modelPrice = u.modelPpm*u.area; u.dev = (u.price-u.modelPrice)/u.modelPrice; }
+});
+const yb = sold.reduce((s,u)=>s+u.ppm,0)/sold.length;
+const R2 = 1 - sold.reduce((s,u)=>s+(u.ppm-u.modelPpm)**2,0)/sold.reduce((s,u)=>s+(u.ppm-yb)**2,0);
+const coef = Object.fromEntries([['int',beta[0]],...DUMMIES.map((t,i)=>[t,beta[i+1]]),['floor',beta[DUMMIES.length+1]],['month',beta[DUMMIES.length+2]]]);
+const typeEffect = t => t===BASE?0:coef[t];
+
+// ---------- formatting ----------
+const eur = v => '€ ' + Math.round(v).toLocaleString('nl-NL');
+const eurK = v => '€ ' + Math.round(v/1000).toLocaleString('nl-NL') + 'k';
+const m2 = v => v.toLocaleString('nl-NL',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' m²';
+const pct = v => (v>0?'+':'') + (v*100).toFixed(1) + '%';
+const dfmt = d => d ? d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '–';
+const floorsOf = u => u.duplex ? `${u.floor}–${u.floor+1}` : `${u.floor}`;
+const css = k => getComputedStyle(document.documentElement).getPropertyValue(k).trim();
+
+// ---------- colour scales ----------
+function hex2rgb(h){h=h.replace('#','');if(h.length===3)h=h.split('').map(c=>c+c).join('');return [0,2,4].map(i=>parseInt(h.slice(i,i+2),16));}
+function mix(a,b,t){const A=hex2rgb(a),B=hex2rgb(b);return '#'+A.map((v,i)=>Math.round(v+(B[i]-v)*t).toString(16).padStart(2,'0')).join('');}
+const SEQ = ['#cde2fb','#9ec5f4','#6da7ec','#3987e5','#256abf','#184f95','#0d366b'];
+function seq(t){t=Math.max(0,Math.min(1,t));const s=t*(SEQ.length-1),i=Math.min(SEQ.length-2,Math.floor(s));return mix(SEQ[i],SEQ[i+1],s-i);}
+const DEV_LIM = 0.04;
+function div(v){const t=Math.max(-1,Math.min(1,v/DEV_LIM));return t<0?mix(css('--mid'),css('--cool'),-t):mix(css('--mid'),css('--warm'),t);}
+const ext = (arr) => [Math.min(...arr),Math.max(...arr)];
+const ppmExt = ext(sold.map(u=>u.ppm)), priceExt = ext(sold.map(u=>u.price)), dateExt = ext(sold.map(u=>+u.date)), facExt = ext(units.map(u=>u.facade));
+
+let mode = 'dev';
+function colorFor(u){
+  if (mode==='group') return css(GROUPS[u.group].key);
+  if (mode==='glass') return seq((u.facade-facExt[0])/(facExt[1]-facExt[0]));
+  if (!u.price) return null;
+  if (mode==='dev') return div(u.dev);
+  if (mode==='ppm') return seq((u.ppm-ppmExt[0])/(ppmExt[1]-ppmExt[0]));
+  if (mode==='price') return seq((u.price-priceExt[0])/(priceExt[1]-priceExt[0]));
+  if (mode==='date') return seq((u.date-dateExt[0])/(dateExt[1]-dateExt[0]));
+}
+
+// ---------- header KPIs & findings ----------
+const avgPpm = yb;
+document.getElementById('kpis').innerHTML = [
+  [`${sold.length} / 80`,'units with a recorded sale'],
+  [eur(avgPpm),'average price per m²'],
+  [eurK(Math.min(...sold.map(u=>u.price)))+' – '+eurK(Math.max(...sold.map(u=>u.price))),'range of sale prices'],
+  [(R2*100).toFixed(0)+'%','of €/m² variation explained by type, floor and date'],
+].map(([b,s])=>`<div class="kpi"><b>${b}</b><span>${s}</span></div>`).join('');
+
+const ranked = [...sold].sort((a,b)=>a.dev-b.dev);
+const cheap = ranked.slice(0,3), dear = ranked.slice(-3).reverse();
+const unitLink = u => `<b>${u.n}</b> (${u.type}, fl ${floorsOf(u)}, ${pct(u.dev)})`;
+document.getElementById('findings').innerHTML = [
+  [eur(coef.floor)+' /m²','per floor higher',`Each floor adds about ${eur(coef.floor)} per m², around ${(coef.floor/avgPpm*100).toFixed(1)}% a floor. Going from floor 5 to 11 on a 51 m² W6F is worth roughly ${eur(coef.floor*6*51.11)}.`],
+  [eur(-coef.W3)+' /m²','duplex discount',`A W3 duplex costs ${eur(-coef.W3)} less per m² than a W6F side flat on the same floor (W3A: ${eur(-coef.W3A)}, W4 corner duplex: ${eur(-coef.W4)}). You get the most space per euro in the duplexes.`],
+  [pct(typeEffect('W1')/avgPpm)+' / '+pct(typeEffect('W5')/avgPpm),'corner premium, W1 / W5',`The corner flats with two glass façades cost about the same per m² as the one-façade W6F. The extra glass is priced into their larger size, not into a higher rate. W1A is the exception, about ${eur(-typeEffect('W1A'))} cheaper per m².`],
+  [eur(coef.month)+' /m²','per month of transfer date',`The transfer date barely matters (${(coef.month*12/avgPpm*100).toFixed(1)}% a year). That fits a developer price list fixed at contract signing.`],
+  ['±'+(Math.sqrt(sold.reduce((s,u)=>s+u.dev**2,0)/sold.length)*100).toFixed(1)+'%','typical deviation from model',`Prices follow the model closely. Best value: ${cheap.map(unitLink).join(', ')}. Highest premium: ${dear.map(unitLink).join(', ')}.`],
+].map(([big,lbl,txt])=>`<div class="finding"><div class="eyebrow">${lbl}</div><div class="big">${big}</div><p>${txt}</p></div>`).join('');
+
+// ---------- three.js scene ----------
+const stage = document.getElementById('stage');
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));
+stage.prepend(renderer.domElement);
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(35,1,0.5,500);
+camera.position.set(78,52,84);
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true; controls.target.set(0,9,0); controls.maxPolarAngle = Math.PI*0.495; controls.minDistance=20; controls.maxDistance=160;
+scene.add(new THREE.HemisphereLight(0xffffff,0x8a8f8c,0.85));
+const sun = new THREE.DirectionalLight(0xffffff,0.55); sun.position.set(30,60,20); scene.add(sun);
+
+const root = new THREE.Group(); scene.add(root);
+const floorGroups = {}; for(let f=5;f<=12;f++){floorGroups[f]=new THREE.Group();root.add(floorGroups[f]);}
+const unitMeshes = []; const glassMeshes = []; const labelSprites = {};
+const edgesMat = new THREE.LineBasicMaterial({transparent:true,opacity:0.35});
+const coreMat = new THREE.MeshStandardMaterial({transparent:true,opacity:0.55,roughness:0.9});
+const podiumMat = new THREE.MeshStandardMaterial({transparent:true,opacity:0.18,roughness:1});
+const glassMat = new THREE.MeshStandardMaterial({color:0x9fd0f0,transparent:true,opacity:0.55,side:THREE.DoubleSide,metalness:0.1,roughness:0.15});
+
+function addBox(group,x,z,y0,h,mat,gap=0.12,radii={}){
+  const g2=gap/2, X=[x[0]+g2,x[1]-g2], Z=[z[0]+g2,z[1]-g2];
+  let geo;
+  if (Object.keys(radii).length){
+    const r={}; for(const k in radii) r[k]=Math.max(0.1,radii[k]-g2);
+    geo = new THREE.ExtrudeGeometry(roundedShape(X[0],X[1],Z[0],Z[1],r),{depth:h,bevelEnabled:false});
+    geo.rotateX(-Math.PI/2);
+  } else {
+    geo = new THREE.BoxGeometry(X[1]-X[0],h,Z[1]-Z[0]); geo.translate((X[0]+X[1])/2,h/2,(Z[0]+Z[1])/2);
+  }
+  const m = new THREE.Mesh(geo,mat);
+  m.position.set(0,y0,0); m.userData.cx=(X[0]+X[1])/2; m.userData.cz=(Z[0]+Z[1])/2;
+  group.add(m);
+  const e = new THREE.LineSegments(new THREE.EdgesGeometry(geo,25),edgesMat); e.position.copy(m.position); group.add(e);
+  return m;
+}
+const yOf = f => (f-5)*H;
+units.forEach(u=>{
+  u.meshes=[];
+  u.boxes.forEach(b=>{
+    const mat = new THREE.MeshStandardMaterial({roughness:0.75,metalness:0,transparent:true});
+    const h = H-0.35;
+    const m = addBox(floorGroups[b.f], b.x, b.z, yOf(b.f), h, mat, 0.12, cornerRadii(b));
+    m.userData.unit = u; m.userData.f = b.f; u.meshes.push(m); unitMeshes.push(m);
+    exteriorFaces(b).forEach(fc=>{
+      let g;
+      if (fc.arc){
+        g = new THREE.Mesh(new THREE.CylinderGeometry(fc.r+0.06,fc.r+0.06,h*0.72,16,1,true,-fc.a0,Math.PI/2),glassMat);
+        g.position.set(fc.cx, yOf(b.f)+h/2, fc.cz);
+      } else {
+        const len = fc.len-0.3; if (len<0.3) return;
+        g = new THREE.Mesh(new THREE.PlaneGeometry(len,h*0.72),glassMat);
+        const mid=(fc.from+fc.to)/2, off=0.08*fc.n;
+        if (fc.axis==='x'){ g.rotation.y=Math.PI/2; g.position.set(fc.at+off, yOf(b.f)+h/2, mid); }
+        else { g.position.set(mid, yOf(b.f)+h/2, fc.at+off); }
+      }
+      g.visible=false; g.userData.f=b.f; g.userData.u=u; floorGroups[b.f].add(g); glassMeshes.push(g);
+    });
+  });
+});
+// cores + corridors (common areas: lilac in the NEN plans)
+for(let f=5;f<=12;f++){
+  const g=floorGroups[f], h=H-0.35, y=yOf(f);
+  g.userData.cores=[addBox(g,[-1.1,1.1],[-ZE+1.2,-ZM],y,h,coreMat), addBox(g,[-1.1,1.1],[ZM,ZE-1],y,h,coreMat)];
+  if (f%2===1) g.userData.cores.push(addBox(g,[-0.9,0.9],[-ZM,ZM],y,h*0.25,coreMat,0.05));
+}
+// podium floors 0-4, ghosted
+const PR = R+1;
+const podium = addBox(root,[-XE-1,XE+1],[-ZE-1,ZE+1],-1.5*H,1.5*H-0.2,podiumMat,0,{x0z0:PR,x1z0:PR,x0z1:PR,x1z1:PR});
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(400,400), new THREE.MeshBasicMaterial({transparent:true,opacity:0.6}));
+ground.rotation.x=-Math.PI/2; ground.position.y=-1.5*H-0.01; scene.add(ground);
+
+// house number labels (shown when a floor is isolated)
+function makeLabel(text){
+  const c=document.createElement('canvas'); c.width=128; c.height=64; const x=c.getContext('2d');
+  x.font='600 40px "IBM Plex Mono", monospace'; x.textAlign='center'; x.textBaseline='middle';
+  x.fillStyle='rgba(0,0,0,0)'; x.fillRect(0,0,128,64);
+  x.lineWidth=6; x.strokeStyle='rgba(255,255,255,0.9)'; x.strokeText(text,64,34); x.fillStyle='#16201D'; x.fillText(text,64,34);
+  const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),depthTest:false}));
+  s.scale.set(3.2,1.6,1); s.renderOrder=10; return s;
+}
+const allLabels = [];
+units.forEach(u=>{u.meshes.forEach((m,i)=>{const s=makeLabel(String(u.n)); s.position.set(m.userData.cx,m.position.y+H*0.62,m.userData.cz); s.visible=false; s.userData.f=m.userData.f; s.userData.u=u; s.userData.last = i===u.meshes.length-1; m.parent.add(s); allLabels.push(s);});});
+
+// state
+let isolated = null, selected = null, hovered = null, explode = 0;
+const typeSel = new Set();
+const match = u => typeSel.size===0 || typeSel.has(u.type);
+function applyColors(){
+  edgesMat.color.set(css('--ink'));
+  coreMat.color.set(css('--lilac'));
+  podiumMat.color.set(css('--muted'));
+  ground.material.color.set(css('--bg'));
+  scene.background = new THREE.Color(css('--panel'));
+  unitMeshes.forEach(m=>{
+    const u=m.userData.unit, c=colorFor(u), dim = (isolated!==null && m.userData.f!==isolated) || !match(u);
+    m.material.color.set(c || css('--unsold'));
+    m.material.opacity = dim ? 0.07 : (c ? 1 : 0.6);
+    m.material.depthWrite = !dim;
+    const isSel = selected===u, isHov = hovered===u;
+    m.material.emissive.set(isSel ? css('--accent') : (isHov ? '#ffffff' : '#000000'));
+    m.material.emissiveIntensity = isSel ? 0.55 : (isHov ? 0.18 : 0);
+  });
+  for(let f=5;f<=12;f++){
+    const dim = isolated!==null && f!==isolated;
+    floorGroups[f].userData.cores.forEach(c=>{c.visible=!dim;});
+  }
+  allLabels.forEach(s=>{const u=s.userData.u;
+    s.visible = match(u) && (isolated!==null ? s.userData.f===isolated : (typeSel.size>0 && s.userData.last));});
+  const showGlass = document.getElementById('glazing').checked;
+  glassMeshes.forEach(g=>g.visible = showGlass && match(g.userData.u) && (isolated===null || g.userData.f===isolated));
+  renderLegend();
+}
+function applyExplode(){
+  for(let f=5;f<=12;f++){ const pair=Math.floor((f-5)/2); floorGroups[f].position.y = pair*explode*0.09 + (f-5)*explode*0.015; }
+}
+
+// floor buttons
+const floorsEl=document.getElementById('floors');
+floorsEl.innerHTML = '<button data-f="all" aria-pressed="true">All</button>' + [5,6,7,8,9,10,11,12].map(f=>`<button data-f="${f}" aria-pressed="false">${f}e</button>`).join('');
+floorsEl.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+  isolated = b.dataset.f==='all'?null:+b.dataset.f;
+  floorsEl.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  if (isolated!==null){ controls.target.set(0,floorGroups[isolated].position.y+yOf(isolated),0); }
+  else controls.target.set(0,9,0);
+  applyColors();});
+document.getElementById('modes').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;mode=b.dataset.mode;
+  document.querySelectorAll('#modes button').forEach(x=>x.setAttribute('aria-pressed',x===b));applyColors();});
+document.getElementById('explode').addEventListener('input',e=>{explode=+e.target.value;applyExplode();});
+document.getElementById('glazing').addEventListener('change',applyColors);
+
+// type filter
+const chipsEl = document.getElementById('typeChips');
+chipsEl.innerHTML = '<span class="lbl">Compare</span><button data-t="all" aria-pressed="true">All types</button>' +
+  TYPES.map(t=>`<button data-t="${t}" aria-pressed="false" title="${TYPE_DESC[t]}">${t}</button>`).join('');
+chipsEl.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+  if (b.dataset.t==='all') typeSel.clear(); else typeSel.has(b.dataset.t)?typeSel.delete(b.dataset.t):typeSel.add(b.dataset.t);
+  setTypes();});
+function setTypes(types){
+  if (types){ typeSel.clear(); types.forEach(t=>typeSel.add(t)); }
+  chipsEl.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x.dataset.t==='all' ? typeSel.size===0 : typeSel.has(x.dataset.t)));
+  if (selected && !match(selected)) { selected=null; renderCard(null); }
+  applyColors(); renderCompare(); drawCharts(); renderTable();
+}
+function renderCompare(){
+  const el=document.getElementById('compare');
+  if (!typeSel.size){ el.hidden=true; el.innerHTML=''; return; }
+  const list=units.filter(match).sort((a,b)=>a.type.localeCompare(b.type)||a.floorEff-b.floorEff||a.n-b.n);
+  const s=list.filter(u=>u.price);
+  const avg=f=>s.reduce((a,u)=>a+f(u),0)/s.length;
+  const stats = s.length ? [
+    ['Sold', `${s.length} of ${list.length}`],
+    ['Average price', eur(avg(u=>u.price))],
+    ['Average € / m²', eur(avg(u=>u.ppm))],
+    ['€ / m² range', eur(Math.min(...s.map(u=>u.ppm)))+' – '+eur(Math.max(...s.map(u=>u.ppm)))],
+    ['Price range', eurK(Math.min(...s.map(u=>u.price)))+' – '+eurK(Math.max(...s.map(u=>u.price)))],
+  ] : [['Sold',`0 of ${list.length}`]];
+  el.hidden=false;
+  el.innerHTML = `<div><div class="eyebrow">Comparing ${[...typeSel].join(' + ')}</div>
+    <div class="sub" style="font-size:13px;color:var(--ink-2)">${[...typeSel].map(t=>`<b>${t}</b>: ${TYPE_DESC[t]}`).join('<br>')}</div></div>
+    <dl>${stats.map(([a,b])=>`<dt>${a}</dt><dd>${b}</dd>`).join('')}</dl>
+    <table><thead><tr><th>No.</th><th>Fl</th><th>Price</th><th>€/m²</th><th>vs model</th></tr></thead><tbody>
+    ${list.map(u=>`<tr data-n="${u.n}" class="${selected===u?'sel':''}"><td>${u.n}${typeSel.size>1?` <span style="color:var(--muted)">${u.type}</span>`:''}</td><td>${floorsOf(u)}</td>
+      <td class="${u.price?'':'est'}">${eurK(u.price||u.estNow)}</td><td class="${u.price?'':'est'}">${eur(u.ppm||u.estPpmNow)}</td>
+      <td>${u.price?`<span class="dev"><i style="background:${div(u.dev)}"></i>${pct(u.dev)}</span>`:'–'}</td></tr>`).join('')}
+    </tbody></table>
+    <p class="empty" style="margin:0">Estimates for unsold units are in grey italics.</p>`;
+  el.querySelectorAll('tbody tr').forEach(tr=>tr.addEventListener('click',()=>select(byN.get(+tr.dataset.n))));
+}
+
+// legend
+function renderLegend(){
+  const el=document.getElementById('legend');
+  const unsold=`<div class="swatches"><div><span class="sw" style="background:var(--unsold);opacity:.7"></span>No recorded sale in the extract</div></div>`;
+  const rampHtml=(lo,hi,title,grad)=>`<div class="eyebrow">${title}</div><div class="ramp" style="background:linear-gradient(90deg,${grad})"></div><div class="ramp-labels"><span>${lo}</span><span>${hi}</span></div>`;
+  const seqGrad = SEQ.join(',');
+  if (mode==='dev') el.innerHTML = rampHtml('−4% cheaper','+4% dearer','Sale price vs. model',`${css('--cool')},${css('--mid')},${css('--warm')}`)+unsold;
+  if (mode==='ppm') el.innerHTML = rampHtml(eur(ppmExt[0]),eur(ppmExt[1]),'Price per m²',seqGrad)+unsold;
+  if (mode==='price') el.innerHTML = rampHtml(eurK(priceExt[0]),eurK(priceExt[1]),'Sale price',seqGrad)+unsold;
+  if (mode==='date') el.innerHTML = rampHtml(dfmt(new Date(dateExt[0])),dfmt(new Date(dateExt[1])),'Transfer date',seqGrad)+unsold;
+  if (mode==='glass') el.innerHTML = rampHtml(facExt[0].toFixed(0)+' m',facExt[1].toFixed(0)+' m','Exterior façade length (glass proxy)',seqGrad);
+  if (mode==='group') el.innerHTML = `<div class="eyebrow">Layout type</div><div class="swatches">${Object.values(GROUPS).map(g=>`<div><span class="sw" style="background:var(${g.key})"></span>${g.label}</div>`).join('')}</div>`;
+}
+
+// card
+function renderCard(u){
+  const el=document.getElementById('card');
+  if(!u){el.innerHTML='<p class="empty">Select a unit in the model or the table to see its numbers.</p>';return;}
+  const devPill = u.price ? `<span class="pill"><i style="background:${div(u.dev)}"></i>${pct(u.dev)} vs. model · ${Math.abs(u.dev)<0.01?'in line':(u.dev<0?'cheap for its kind':'expensive for its kind')}</span>` : `<span class="pill"><i style="background:var(--unsold)"></i>No recorded transfer</span>`;
+  const rows = [
+    ['Floor', floorsOf(u)+(u.duplex?' (duplex)':'')],
+    ['Area (GBO)', m2(u.area)],
+    ['Façade length', '≈ '+u.facade.toFixed(1)+' m'],
+  ];
+  if (u.price) rows.push(['Sale price',eur(u.price)],['Price / m²',eur(u.ppm)],['Transfer date',dfmt(u.date)],['Model price',eur(u.modelPrice)],['Model € / m²',eur(u.modelPpm)]);
+  rows.push(['Estimate today',eur(u.estNow)],['Estimate € / m²',eur(u.estPpmNow)]);
+  const peers = sold.filter(p=>p.type===u.type && p!==u);
+  el.innerHTML = `<div><div class="eyebrow">House number</div><div class="num">${u.n}</div></div>
+    <div class="sub"><b>${u.type}</b> · ${TYPE_DESC[u.type]}</div>${devPill}
+    <dl>${rows.map(([a,b])=>`<dt>${a}</dt><dd>${b}</dd>`).join('')}</dl>
+    ${typeSel.size===1&&typeSel.has(u.type)?'':`<button class="chip" id="cmpBtn">Compare all ${units.filter(x=>x.type===u.type).length} ${u.type} units</button>`}
+    ${peers.length&&!typeSel.has(u.type)?`<div class="sub">Other ${u.type} sales: ${peers.sort((a,b)=>a.floorEff-b.floorEff).map(p=>`${p.n} (fl ${floorsOf(p)}) ${eurK(p.price)}`).join(' · ')}</div>`:''}`;
+  const cb=document.getElementById('cmpBtn'); if(cb) cb.addEventListener('click',()=>setTypes([u.type]));
+}
+function select(u){
+  selected=u; applyColors(); renderCard(u); highlightRow(u);
+}
+document.getElementById('findInput').addEventListener('input',e=>{const u=byN.get(+e.target.value.trim()); if(u){select(u);}});
+
+// picking
+const ray=new THREE.Raycaster(), ptr=new THREE.Vector2(), tip=document.getElementById('tip');
+function pick(ev){
+  const r=renderer.domElement.getBoundingClientRect();
+  ptr.x=((ev.clientX-r.left)/r.width)*2-1; ptr.y=-((ev.clientY-r.top)/r.height)*2+1;
+  ray.setFromCamera(ptr,camera);
+  const cand = unitMeshes.filter(m=>(isolated===null||m.userData.f===isolated)&&match(m.userData.unit));
+  const hit = ray.intersectObjects(cand,false)[0];
+  return hit ? hit.object.userData.unit : null;
+}
+renderer.domElement.addEventListener('pointermove',ev=>{
+  const u=pick(ev); if(u!==hovered){hovered=u;applyColors();}
+  if(u){const r=stage.getBoundingClientRect();tip.hidden=false;tip.style.left=(ev.clientX-r.left)+'px';tip.style.top=(ev.clientY-r.top)+'px';
+    tip.innerHTML=`<b>${u.n}</b> · ${u.type} · fl ${floorsOf(u)} · ${m2(u.area)}<br>`+(u.price?`${eur(u.price)} · ${eur(u.ppm)}/m² · ${pct(u.dev)}`:`no sale · est. ${eurK(u.estNow)}`);}
+  else tip.hidden=true;
+});
+renderer.domElement.addEventListener('pointerleave',()=>{tip.hidden=true;hovered=null;applyColors();});
+let downAt=null;
+renderer.domElement.addEventListener('pointerdown',ev=>{downAt=[ev.clientX,ev.clientY];});
+renderer.domElement.addEventListener('pointerup',ev=>{if(!downAt)return;const moved=Math.hypot(ev.clientX-downAt[0],ev.clientY-downAt[1]);downAt=null;if(moved<5){select(pick(ev));}});
+
+function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
+new ResizeObserver(resize).observe(stage); resize();
+(function loop(){controls.update();renderer.render(scene,camera);requestAnimationFrame(loop);})();
+
+// ---------- charts ----------
+const NS='http://www.w3.org/2000/svg';
+function el(tag,attrs,parent){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);parent&&parent.appendChild(e);return e;}
+function ticks(lo,hi,n){const step=Math.pow(10,Math.floor(Math.log10((hi-lo)/n)));const err=(hi-lo)/n/step;const s=step*(err>=5?10:err>=2?5:err>=1.5?2:1);const out=[];for(let v=Math.ceil(lo/s)*s;v<=hi+1e-9;v+=s)out.push(v);return out;}
+function chartTip(container){let t=container.querySelector('.ctip');if(!t){t=document.createElement('div');t.className='ctip';t.hidden=true;container.appendChild(t);}return t;}
+function groupLegend(id){document.getElementById(id).innerHTML=Object.values(GROUPS).map(g=>`<span><span class="sw" style="background:var(${g.key});border-radius:50%"></span>${g.label}</span>`).join('');}
+
+function scatter(svgId, pts, {x,y,xLab,yLab,xFmt,yFmt,xDom,yDom,diag,jitter}){
+  const svg=document.getElementById(svgId); svg.innerHTML='';
+  const W=420,Hh=260,m={l:58,r:12,t:10,b:36};
+  const sx=v=>m.l+(v-xDom[0])/(xDom[1]-xDom[0])*(W-m.l-m.r), sy=v=>Hh-m.b-(v-yDom[0])/(yDom[1]-yDom[0])*(Hh-m.t-m.b);
+  const grid=el('g',{},svg);
+  ticks(yDom[0],yDom[1],5).forEach(v=>{el('line',{x1:m.l,x2:W-m.r,y1:sy(v),y2:sy(v),stroke:'var(--line)','stroke-width':1},grid);const t=el('text',{x:m.l-6,y:sy(v)+3,'text-anchor':'end'},grid);t.textContent=yFmt(v);});
+  (x.ticks||ticks(xDom[0],xDom[1],5)).forEach(v=>{const t=el('text',{x:sx(v),y:Hh-m.b+14,'text-anchor':'middle'},grid);t.textContent=xFmt(v);});
+  el('line',{x1:m.l,x2:W-m.r,y1:Hh-m.b,y2:Hh-m.b,stroke:'var(--muted)','stroke-width':1},grid);
+  const xl=el('text',{x:(m.l+W-m.r)/2,y:Hh-4,'text-anchor':'middle',class:'lab'},svg);xl.textContent=xLab;
+  const yl=el('text',{x:12,y:(m.t+Hh-m.b)/2,'text-anchor':'middle',class:'lab',transform:`rotate(-90 12 ${(m.t+Hh-m.b)/2})`},svg);yl.textContent=yLab;
+  if(diag){const a=Math.max(xDom[0],yDom[0]),b=Math.min(xDom[1],yDom[1]);el('line',{x1:sx(a),y1:sy(a),x2:sx(b),y2:sy(b),stroke:'var(--muted)','stroke-dasharray':'4 3','stroke-width':1},svg);}
+  const tipEl=chartTip(svg.parentNode);
+  pts.forEach(u=>{
+    const jx = jitter? ((u.n%7)-3)*0.045 : 0;
+    const on = match(u);
+    const c=el('circle',{cx:sx(x.get(u)+jx),cy:sy(y.get(u)),r:on&&typeSel.size?5.5:4.5,fill:`var(${GROUPS[u.group].key})`,stroke:'var(--panel)','stroke-width':2,'fill-opacity':on?1:0.15,'stroke-opacity':on?1:0,style:'cursor:pointer'},svg);
+    if (on && typeSel.size){ const t=el('text',{x:+c.getAttribute('cx')+7,y:+c.getAttribute('cy')+3,class:'lab'},svg); t.textContent=u.n; }
+    const hit=el('circle',{cx:c.getAttribute('cx'),cy:c.getAttribute('cy'),r:9,fill:'transparent',style:'cursor:pointer'},svg);
+    hit.addEventListener('mouseenter',()=>{c.setAttribute('r',6.5);const r=svg.getBoundingClientRect(),pr=svg.parentNode.getBoundingClientRect(),k=r.width/W;
+      tipEl.hidden=false;tipEl.innerHTML=`<b>${u.n}</b> ${u.type} · fl ${floorsOf(u)}<br>${eur(u.price)} · ${eur(u.ppm)}/m² · ${pct(u.dev)}`;
+      tipEl.style.left=(r.left-pr.left+(+c.getAttribute('cx'))*k+10)+'px';tipEl.style.top=(r.top-pr.top+(+c.getAttribute('cy'))*k-44)+'px';});
+    hit.addEventListener('mouseleave',()=>{c.setAttribute('r',4.5);tipEl.hidden=true;});
+    hit.addEventListener('click',()=>{select(u);document.getElementById('stage').scrollIntoView({behavior:'smooth',block:'center'});});
+  });
+}
+function drawCharts(){
+  groupLegend('legFloor'); groupLegend('legModel');
+  const pp=ext(sold.map(u=>u.ppm));
+  scatter('svgFloor',sold,{x:{get:u=>u.floorEff,ticks:[5,6,7,8,9,10,11,12]},y:{get:u=>u.ppm},xLab:'Floor (duplexes at their mid-level)',yLab:'€ per m²',
+    xFmt:v=>v+'e',yFmt:v=>(v/1000).toFixed(1)+'k',xDom:[4.6,12.4],yDom:[Math.floor(pp[0]/500)*500,Math.ceil(pp[1]/500)*500],jitter:true});
+  const all=sold.flatMap(u=>[u.price,u.modelPrice]),lo=Math.floor(Math.min(...all)/100000)*100000,hi=Math.ceil(Math.max(...all)/100000)*100000;
+  scatter('svgModel',sold,{x:{get:u=>u.modelPrice},y:{get:u=>u.price},xLab:'Model price',yLab:'Actual sale price',xFmt:v=>eurK(v),yFmt:v=>eurK(v),xDom:[lo,hi],yDom:[lo,hi],diag:true});
+  // type bars
+  const svg=document.getElementById('svgType'); svg.innerHTML='';
+  const W=420,Hh=260,m={l:150,r:62,t:6,b:10};
+  const rows=TYPES.map(t=>{const s=sold.filter(u=>u.type===t);return {t,n:s.length,ppm:s.reduce((a,u)=>a+u.ppm,0)/s.length,area:units.find(u=>u.type===t).area};}).filter(r=>r.n).sort((a,b)=>b.ppm-a.ppm);
+  const maxV=Math.ceil(Math.max(...rows.map(r=>r.ppm))/1000)*1000, bh=(Hh-m.t-m.b)/rows.length;
+  const sx=v=>m.l+v/maxV*(W-m.l-m.r);
+  [0,maxV/2,maxV].forEach(v=>el('line',{x1:sx(v),x2:sx(v),y1:m.t,y2:Hh-m.b,stroke:'var(--line)'},svg));
+  rows.forEach((r,i)=>{const y=m.t+i*bh+bh*0.22,h=bh*0.56;
+    const on = typeSel.size===0||typeSel.has(r.t);
+    const bar=el('rect',{x:m.l,y,width:sx(r.ppm)-m.l,height:h,rx:3,fill:`var(${GROUPS[groupOf(r.t)].key})`,'fill-opacity':on?1:0.2,style:'cursor:pointer'},svg);
+    bar.addEventListener('click',()=>setTypes(typeSel.size===1&&typeSel.has(r.t)?[]:[r.t]));
+    const a=el('text',{x:m.l-8,y:y+h/2-2,'text-anchor':'end',class:'lab',style:'font-weight:500'},svg);a.textContent=r.t;
+    const b=el('text',{x:m.l-8,y:y+h/2+10,'text-anchor':'end'},svg);b.textContent=`${r.area.toFixed(0)} m² · n=${r.n}`;
+    const v=el('text',{x:sx(r.ppm)+6,y:y+h/2+4,class:'lab'},svg);v.textContent=eur(r.ppm);});
+}
+
+// ---------- table ----------
+const COLS=[
+  {k:'n',l:'No.',f:u=>u.n,s:u=>u.n},
+  {k:'floor',l:'Floor',f:floorsOf,s:u=>u.floorEff},
+  {k:'type',l:'Type',f:u=>u.type,s:u=>u.type},
+  {k:'area',l:'Area',f:u=>m2(u.area),s:u=>u.area},
+  {k:'fac',l:'Façade',f:u=>u.facade.toFixed(1)+' m',s:u=>u.facade},
+  {k:'date',l:'Transfer',f:u=>dfmt(u.date),s:u=>u.date?+u.date:-Infinity},
+  {k:'price',l:'Price',f:u=>u.price?eur(u.price):eur(u.estNow),s:u=>u.price||u.estNow,est:u=>!u.price},
+  {k:'ppm',l:'€ / m²',f:u=>eur(u.ppm||u.estPpmNow),s:u=>u.ppm||u.estPpmNow,est:u=>!u.price},
+  {k:'model',l:'Model € / m²',f:u=>u.price?eur(u.modelPpm):'–',s:u=>u.modelPpm||-Infinity},
+  {k:'dev',l:'Vs. model',f:u=>u.price?`<span class="dev"><i style="background:${div(u.dev)}"></i>${pct(u.dev)}</span>`:'–',s:u=>u.price?u.dev:-Infinity},
+];
+let sortK='n',sortDir=1;
+function renderTable(){
+  const thead=document.querySelector('#tbl thead'),tbody=document.querySelector('#tbl tbody');
+  thead.innerHTML='<tr>'+COLS.map(c=>`<th><button data-k="${c.k}" ${c.k===sortK?`data-dir="${sortDir}"`:''}>${c.l}${c.k===sortK?(sortDir>0?' ↑':' ↓'):''}</button></th>`).join('')+'</tr>';
+  const col=COLS.find(c=>c.k===sortK);
+  const rows=units.filter(match).sort((a,b)=>{const A=col.s(a),B=col.s(b);return (A>B?1:A<B?-1:0)*sortDir;});
+  const note=document.getElementById('tblNote');
+  note.hidden = typeSel.size===0;
+  if (typeSel.size) note.innerHTML = `Showing ${rows.length} ${[...typeSel].join(' + ')} units. <button class="chip" id="clearTypes">Show all 80</button>`;
+  const ct=document.getElementById('clearTypes'); if(ct) ct.addEventListener('click',()=>setTypes([]));
+  tbody.innerHTML=rows.map(u=>`<tr data-n="${u.n}" class="${selected===u?'sel':''}">${COLS.map(c=>`<td class="${c.est&&c.est(u)?'est':''}">${c.f(u)}</td>`).join('')}</tr>`).join('');
+}
+document.querySelector('#tbl thead').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(sortK===b.dataset.k)sortDir*=-1;else{sortK=b.dataset.k;sortDir=b.dataset.k==='dev'||b.dataset.k==='price'||b.dataset.k==='ppm'?-1:1;}renderTable();});
+document.querySelector('#tbl tbody').addEventListener('click',e=>{const tr=e.target.closest('tr');if(!tr)return;const u=byN.get(+tr.dataset.n);
+  if(isolated!==null&&!u.boxes.some(b=>b.f===isolated)){isolated=null;floorsEl.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.f==='all'));controls.target.set(0,9,0);}
+  select(u,true);stage.scrollIntoView({behavior:'smooth',block:'center'});});
+function highlightRow(u){document.querySelectorAll('tbody tr[data-n]').forEach(tr=>tr.classList.toggle('sel',u&&+tr.dataset.n===u.n));}
+
+// ---------- boot + theme changes ----------
+function refreshAll(){applyColors();drawCharts();renderTable();renderCard(selected);renderCompare();}
+refreshAll();
+new MutationObserver(refreshAll).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',refreshAll);
+})();
+</script>
+
+</body></html>
