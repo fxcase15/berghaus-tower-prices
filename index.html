@@ -98,8 +98,9 @@ h3{font-family:var(--display);font-stretch:112%;font-weight:700;font-size:16px;m
 dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:0;font-size:13px}
 dt{color:var(--muted)}
 dd{margin:0;font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right}
-.pill{display:inline-flex;align-items:center;gap:6px;font:500 12px var(--mono);padding:3px 8px;border-radius:99px;border:1px solid var(--line);width:max-content}
-.pill i{width:8px;height:8px;border-radius:50%;display:block}
+.pill{max-width:100%;white-space:normal;display:inline-flex;align-items:center;gap:6px;font:500 12px var(--mono);padding:3px 8px;border-radius:99px;border:1px solid var(--line);width:max-content}
+.pill i{width:8px;height:8px;border-radius:50%;display:block;flex:none}
+.side > *{min-width:0}
 .empty{font-size:13px;color:var(--muted)}
 
 /* findings */
@@ -401,7 +402,8 @@ function mix(a,b,t){const A=hex2rgb(a),B=hex2rgb(b);return '#'+A.map((v,i)=>Math
 const SEQ = ['#cde2fb','#9ec5f4','#6da7ec','#3987e5','#256abf','#184f95','#0d366b'];
 function seq(t){t=Math.max(0,Math.min(1,t));const s=t*(SEQ.length-1),i=Math.min(SEQ.length-2,Math.floor(s));return mix(SEQ[i],SEQ[i+1],s-i);}
 const DEV_LIM = 0.04;
-function div(v){const t=Math.max(-1,Math.min(1,v/DEV_LIM));return t<0?mix(css('--mid'),css('--cool'),-t):mix(css('--mid'),css('--warm'),t);}
+// sqrt + floor so a sale at ~0% still reads clearly as blue or red, never as the neutral grey of unsold units
+function div(v){const t=Math.max(-1,Math.min(1,v/DEV_LIM)), s=Math.max(0.35,Math.sqrt(Math.abs(t)));return t<0?mix(css('--mid'),css('--cool'),s):mix(css('--mid'),css('--warm'),s);}
 const ext = (arr) => [Math.min(...arr),Math.max(...arr)];
 const ppmExt = ext(sold.map(u=>u.ppm)), priceExt = ext(sold.map(u=>u.price)), dateExt = ext(sold.map(u=>+u.date)), facExt = ext(units.map(u=>u.facade));
 
@@ -553,7 +555,7 @@ function applyColors(){
   unitMeshes.forEach(m=>{
     const u=m.userData.unit, c=colorFor(u), dim = (isolated!==null && m.userData.f!==isolated) || !match(u);
     m.material.color.set(c || css('--unsold'));
-    m.material.opacity = dim ? 0.07 : (c ? 1 : 0.6);
+    m.material.opacity = dim ? 0.07 : (c ? 1 : 0.3);
     m.material.depthWrite = !dim;
     const isSel = selected===u, isHov = hovered===u;
     m.material.emissive.set(isSel ? css('--accent') : (isHov ? '#ffffff' : '#000000'));
@@ -680,8 +682,29 @@ function renderCard(u){
     ${peers.length&&!typeSel.has(u.type)?`<div class="sub">Other ${u.type} sales: ${peers.sort((a,b)=>a.floorEff-b.floorEff).map(p=>`${p.n} (fl ${floorsOf(p)}) ${eurK(p.price)}`).join(' · ')}</div>`:''}`;
   const cb=document.getElementById('cmpBtn'); if(cb) cb.addEventListener('click',()=>setTypes([u.type]));
 }
+function setIsolated(f){
+  isolated=f;
+  floorsEl.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', f===null ? x.dataset.f==='all' : +x.dataset.f===f));
+}
+// fly the camera so the selected unit is fully in view, looking at it from its façade side
+let fly=null;
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function focusUnit(u){
+  const m = u.meshes[0]; setIsolated(m.userData.f);
+  const box = new THREE.Box3(); u.meshes.forEach(x=>box.expandByObject(x));
+  const c = box.getCenter(new THREE.Vector3()), size = box.getSize(new THREE.Vector3());
+  const towerX = u.other ? (u.floor>=5 ? TX : -25.2) : 0;
+  const dir = new THREE.Vector3(c.x-towerX, 0, c.z); if (dir.length()<1) dir.set(1,0,0);
+  dir.normalize().add(new THREE.Vector3(0.35,0,0.35)).normalize();
+  const dist = Math.max(48, Math.max(size.x,size.z)*3.5);
+  const toPos = c.clone().add(dir.multiplyScalar(dist)).add(new THREE.Vector3(0, dist*0.9, 0));
+  if (reduceMotion){ controls.target.copy(c); camera.position.copy(toPos); return; }
+  fly = {t0:performance.now(), fromT:controls.target.clone(), fromP:camera.position.clone(), toT:c, toP:toPos};
+}
 function select(u){
-  selected=u; applyColors(); renderCard(u); highlightRow(u);
+  selected=u;
+  if (u) focusUnit(u);
+  applyColors(); renderCard(u); highlightRow(u);
 }
 document.getElementById('findInput').addEventListener('input',e=>{const v=+e.target.value.trim(); const u=byN.get(v)||otherByN.get(v); if(u){select(u);}});
 
@@ -709,7 +732,11 @@ renderer.domElement.addEventListener('pointerup',ev=>{if(!downAt)return;const mo
 
 function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
 new ResizeObserver(resize).observe(stage); resize();
-(function loop(){controls.update();renderer.render(scene,camera);requestAnimationFrame(loop);})();
+(function loop(){
+  if (fly){ const k=Math.min(1,(performance.now()-fly.t0)/700), e=k<0.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
+    controls.target.lerpVectors(fly.fromT,fly.toT,e); camera.position.lerpVectors(fly.fromP,fly.toP,e); if(k>=1) fly=null; }
+  controls.update();renderer.render(scene,camera);requestAnimationFrame(loop);})();
+renderer.domElement.addEventListener('pointerdown',()=>{fly=null;});
 
 // ---------- charts ----------
 const NS='http://www.w3.org/2000/svg';
