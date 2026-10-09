@@ -212,6 +212,13 @@ td.est{color:var(--muted);font-style:italic}
     <div class="tablewrap"><table id="tbl"><thead></thead><tbody></tbody></table></div>
   </section>
 
+  <section style="display:grid;gap:12px" id="rentals">
+    <h2>Rentals in the other Berghaus blocks</h2>
+    <p class="lede" style="font-size:14px">The rest of Berghaus is rental housing, so there are no sale prices. These are the asking rents we could see published online (Funda and Huurmatcher, checked 9 Oct 2026). Units that were never listed publicly are not included.</p>
+    <div class="kpis" id="rentKpis"></div>
+    <div class="tablewrap"><table id="rentTbl" style="min-width:640px"><thead></thead><tbody></tbody></table></div>
+  </section>
+
   <section class="notes" id="support">
     <h3>Support this page</h3>
     <p>This page is free. If it helped you, you can buy us a coffee: <a class="chip" href="DONATION_LINK" target="_blank" rel="noopener">Donate</a></p>
@@ -223,6 +230,7 @@ td.est{color:var(--muted);font-style:italic}
     <p><b>Duplexes.</b> W3/W3A and W4 span two floors. Their area is the sum of both levels, for example W3 = 34.15 m² entrance level + 68.07 m² upper level. For the model they count as the floor in between (e.g. 7.5).</p>
     <p><b>Model.</b> An ordinary least-squares fit of € per m² on apartment type, floor and months since July 2025, computed live from the 49 sales. "Vs. model" is the sale price relative to that fit.</p>
     <p><b>Façade length.</b> This is the exterior wall length of each unit in the simplified 3D model, used as a stand-in for glass. It is approximate (about ±1 m), and the rounded glass corners are drawn as square.</p>
+    <p><b>Rentals.</b> The other Berghaus blocks are rental housing (288 homes in total, mostly mid-rent), so there are no Kadaster sale prices for them. The rental table lists only asking rents that are publicly visible on Funda or Huurmatcher, as last advertised. Floor is shown where the listing states it. Unit 551 appears twice because it was let in 2025 and re-advertised in 2026. The gross yield is the average rent × 12 divided by the average sale price per m² of the A6 tower; it ignores service costs, vacancy and the different mix of unit types.</p>
     <p><b>Timing.</b> Dates are notarial transfer dates. For new-build units the price was usually fixed earlier at contract signing, so the date effect understates real market movement.</p>
   </section>
 </div>
@@ -342,6 +350,7 @@ units.forEach(u=>{
   if (u.price){ u.modelPpm = predPpm(u,u.date); u.modelPrice = u.modelPpm*u.area; u.dev = (u.price-u.modelPrice)/u.modelPrice; }
 });
 const yb = sold.reduce((s,u)=>s+u.ppm,0)/sold.length;
+window.BERGHAUS_AVG_SALE_PPM = yb;
 const R2 = 1 - sold.reduce((s,u)=>s+(u.ppm-u.modelPpm)**2,0)/sold.reduce((s,u)=>s+(u.ppm-yb)**2,0);
 const coef = Object.fromEntries([['int',beta[0]],...DUMMIES.map((t,i)=>[t,beta[i+1]]),['floor',beta[DUMMIES.length+1]],['month',beta[DUMMIES.length+2]]]);
 const typeEffect = t => t===BASE?0:coef[t];
@@ -722,6 +731,69 @@ function refreshAll(){applyColors();drawCharts();renderTable();renderCard(select
 refreshAll();
 new MutationObserver(refreshAll).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',refreshAll);
+})();
+</script>
+
+
+<script>
+(function(){
+// Asking rents published online for Berghaus rental units (Elizabeth Anscombestraat, 1062 LE). Checked 2026-10-09.
+// [houseNo, rent €/month, m², floor|null, status, date (rented or listed)|null, source]
+const F='https://www.funda.nl/detail/huur/amsterdam/appartement-elizabeth-anscombestraat-';
+const RENT = [
+  [51, 2290, 66, 2, 'Under offer', null, F+'51/44593451/'],
+  [77, 984, 40, 3, 'Rented', '2026-09-09', F+'77/44562953/'],
+  [79, 2290, 66, 3, 'Available', null, F+'79/44526690/'],
+  [309, 2375, 72, 2, 'Rented', '2026-09-28', F+'309/44591388/'],
+  [327, 2650, 85, 2, 'Under offer', null, F+'327/44592321/'],
+  [355, 2795, 85, 3, 'Available', null, F+'355/44526542/'],
+  [407, 2465, 78, 5, 'Available', null, F+'407/44526632/'],
+  [453, 2690, 77, null, 'Rented', '2025-03-01', F+'453/43705299/'],
+  [457, 1860, 60, null, 'Rented', '2025-03-05', F+'457/43789266/'],
+  [465, 2080, 62, null, 'Rented', null, 'https://huurmatcher.nl/nl/huis/3fe66463-8ed3-4000-b010-c645848a8cc5'],
+  [491, 2110, 62, 9, 'Under offer', null, F+'491/44594672/'],
+  [505, 1920, 60, null, 'Rented', null, 'https://huurmatcher.nl/en/huis/fc7173d3-0dab-42fd-8609-4f983e1b84f6'],
+  [533, 1920, 60, null, 'Rented', null, 'https://huurmatcher.nl/nl/huis/c6b4b0cc-5cad-4346-a904-96542b488cf1'],
+  [551, 2795, 77, null, 'Rented', '2025-03-05', F+'551/43829817/'],
+  [551, 2620, 78, 11, 'Under offer', null, F+'551/44593704/'],
+  [557, 1980, 60, 11, 'Rented', '2026-09-28', F+'557/44594810/'],
+  [583, 1980, 60, null, 'Rented', '2026-03-27', F+'583/43705291/'],
+].map(([n,rent,area,floor,status,date,src])=>({n,rent,area,floor,status,date:date?new Date(date):null,src,pm2:rent/area}));
+
+const eur = v => '€ ' + Math.round(v).toLocaleString('nl-NL');
+const eur2 = v => '€ ' + v.toLocaleString('nl-NL',{minimumFractionDigits:2,maximumFractionDigits:2});
+const dfmt = d => d ? d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) : '–';
+const avg = f => RENT.reduce((s,r)=>s+f(r),0)/RENT.length;
+const units = new Set(RENT.map(r=>r.n)).size;
+const avgPm2 = avg(r=>r.pm2);
+const salePpm = window.BERGHAUS_AVG_SALE_PPM;
+const yieldPct = salePpm ? avgPm2*12/salePpm*100 : null;
+
+document.getElementById('rentKpis').innerHTML = [
+  [`${units}`,'rental units with a public asking rent'],
+  [eur2(avgPm2),'average rent per m² per month'],
+  [eur(Math.min(...RENT.map(r=>r.rent)))+' – '+eur(Math.max(...RENT.map(r=>r.rent))),'range of monthly rents'],
+  yieldPct ? [yieldPct.toFixed(1)+'%','gross rental yield vs. the tower’s average sale price per m²'] : null,
+].filter(Boolean).map(([b,s])=>`<div class="kpi"><b>${b}</b><span>${s}</span></div>`).join('');
+
+const COLS = [
+  ['No.', r=>r.n, r=>r.n],
+  ['Floor', r=>r.floor ?? '–', r=>r.floor ?? -1],
+  ['Area', r=>r.area+' m²', r=>r.area],
+  ['Rent / month', r=>eur(r.rent), r=>r.rent],
+  ['€ / m² / month', r=>eur2(r.pm2), r=>r.pm2],
+  ['Status', r=>r.status, r=>r.status],
+  ['Date', r=>dfmt(r.date), r=>r.date?+r.date:-Infinity],
+  ['Source', r=>`<a href="${r.src}" target="_blank" rel="noopener" style="color:var(--accent)">${r.src.includes('funda')?'Funda':'Huurmatcher'}</a>`, r=>r.src],
+];
+let sk=0, sd=1;
+function render(){
+  document.querySelector('#rentTbl thead').innerHTML = '<tr>'+COLS.map((c,i)=>`<th><button data-i="${i}" ${i===sk?`data-dir="${sd}"`:''}>${c[0]}${i===sk?(sd>0?' ↑':' ↓'):''}</button></th>`).join('')+'</tr>';
+  const rows=[...RENT].sort((a,b)=>{const A=COLS[sk][2](a),B=COLS[sk][2](b);return (A>B?1:A<B?-1:0)*sd;});
+  document.querySelector('#rentTbl tbody').innerHTML = rows.map(r=>`<tr style="cursor:default">${COLS.map(c=>`<td>${c[1](r)}</td>`).join('')}</tr>`).join('');
+}
+document.querySelector('#rentTbl thead').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const i=+b.dataset.i;if(i===sk)sd*=-1;else{sk=i;sd=1;}render();});
+render();
 })();
 </script>
 

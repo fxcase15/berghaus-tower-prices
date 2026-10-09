@@ -12,6 +12,7 @@ All data lives inline in `index.html` (`const RAW = [...]`), one row per unit:
 
 - Floor areas: NEN 2580 GBO measurements (type B, block A6)
 - Sale prices/dates: Kadaster koopsominformatie, postcode 1062 LE (Jul 2025 – Aug 2026)
+- Rentals (other Berghaus blocks): publicly advertised asking rents from Funda and Huurmatcher, checked 2026-10-09, in the `RENT` array near the end of `index.html`. Only units visible online are included.
 
 To add sales, edit `RAW`; the model and every chart recompute automatically. Update `TODAY` when refreshing estimates.
 
