@@ -39,16 +39,39 @@
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
 .wrap{max-width:1280px;margin:0 auto;padding-inline:20px;padding-block:28px 64px;display:grid;gap:36px}
-header{display:grid;gap:10px}
+/* donation banner */
+.donate{--don-bg:#B3261E;background:var(--don-bg);color:#fff}
+.donate-in{max-width:1280px;margin:0 auto;padding:10px 20px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;font-size:14px;line-height:1.4}
+.donate-in p{margin:0;flex:1 1 320px}
+.donate-in b{font-weight:600}
+.donate a.btn{background:#fff;color:#8C1D18;font:600 13px var(--body);text-decoration:none;padding:6px 14px;border-radius:99px;white-space:nowrap}
+.donate a.btn:hover{background:#FDECEA}
+.donate a.btn:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.donate small{font-size:12px;opacity:.85;white-space:nowrap}
+/* header */
+header{display:grid;gap:18px;padding-bottom:28px;border-bottom:1px solid var(--line)}
+.hero-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px 24px}
+nav.jump{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:13px}
+nav.jump a{color:var(--ink-2);text-decoration:none;border-bottom:1px solid transparent}
+nav.jump a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+nav.jump a.don{color:var(--redline);font-weight:600}
+h1 .sub{display:block;font-stretch:100%;font-weight:700;font-size:.42em;letter-spacing:0;color:var(--accent);margin-top:.35em}
+.hero-body{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:16px 48px;align-items:end}
+.lede-big{font-size:clamp(16px,1.6vw,19px);line-height:1.5;color:var(--ink);margin:0;max-width:60ch;text-wrap:pretty}
+.meta{font-size:12px;color:var(--muted);margin:0;line-height:1.6}
+.meta b{color:var(--ink-2);font-weight:500}
+@media (max-width:860px){.hero-body{grid-template-columns:1fr}}
 .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 h1{font-family:var(--display);font-stretch:125%;font-weight:800;font-size:clamp(30px,5vw,54px);line-height:1;margin:0;letter-spacing:-.01em;text-wrap:balance}
 h2{font-family:var(--display);font-stretch:112%;font-weight:700;font-size:22px;margin:0;text-wrap:balance}
 h3{font-family:var(--display);font-stretch:112%;font-weight:700;font-size:16px;margin:0}
 .lede{max-width:68ch;color:var(--ink-2);margin:0}
-.kpis{display:flex;flex-wrap:wrap;gap:28px;margin-top:6px}
+.kpis{display:flex;flex-wrap:wrap;gap:20px 0;margin-top:6px}
+.kpis .kpi{padding-inline:0 24px;margin-right:24px;border-right:1px solid var(--line)}
+.kpis .kpi:last-child{border-right:0;margin-right:0}
 .kpi{display:grid;gap:0}
-.kpi b{font-family:var(--mono);font-weight:500;font-size:22px;font-variant-numeric:tabular-nums}
-.kpi span{font-size:12px;color:var(--muted)}
+.kpi b{font-family:var(--mono);font-weight:500;font-size:clamp(20px,2.2vw,26px);font-variant-numeric:tabular-nums;line-height:1.2}
+.kpi span{font-size:12px;color:var(--muted);max-width:22ch}
 
 /* viewer */
 .viewer{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:0;background:var(--panel);border:1px solid var(--line);border-radius:6px;overflow:hidden}
@@ -146,15 +169,30 @@ td.est{color:var(--muted);font-style:italic}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
+<aside class="donate" id="donateBanner" aria-label="Voluntary donation">
+  <div class="donate-in">
+    <p><b>No ads, no paywall.</b> This page stays free because a few neighbours chip in. If it helped you, the price of a cup of tea makes a real difference.</p>
+    <a class="btn" href="https://tikkie.me/pay/ctec4ashccrpvqi10enb" target="_blank" rel="noopener">Buy us a cup of tea</a>
+    <small>Voluntary · any amount · link valid until 23 Oct</small>
+  </div>
+</aside>
 <div class="wrap">
   <header>
-    <div class="eyebrow">Koningin Wilhelminaplein · 1062 LE Amsterdam · Berghaus complex A6, east tower · floors 5–12 · plus the rental block</div>
-    <h1>Berghaus Tower Prices</h1>
-    <p class="lede">Every apartment in the tower, built from the NEN 2580 floor plans and matched to the Kadaster transfer records. Colour shows how each sale compares with what its type, floor and timing predict, so units that sold cheap or expensive for their kind stand out. The rental half of Berghaus (a second tower and a ring of homes around the courtyard on floors 1–4) is drawn alongside; those homes are not for sale, and the ones with a public asking rent are highlighted.</p>
+    <div class="hero-top">
+      <div class="eyebrow">Berghaus · Koningin Wilhelminaplein · 1062 LE Amsterdam</div>
+      <nav class="jump" aria-label="On this page">
+        <a href="#model">3D model</a><a href="#findings-sec">What drives the price</a><a href="#units">All units</a><a href="#rentals">Rentals</a><a href="#sources">Sources</a><a class="don" href="#donate" id="donNav">Donate</a>
+      </nav>
+    </div>
+    <h1>Berghaus Tower Prices<span class="sub">What every apartment really sold for</span></h1>
+    <div class="hero-body">
+      <p class="lede-big">All 80 owner-occupied homes in the A6 tower, rebuilt in 3D from the official floor plans and matched to the Kadaster sale records. The colours show whether each home sold cheap or expensive for its type, floor and date. The 205 rental homes in the other half of Berghaus are drawn alongside.</p>
+      <p class="meta"><b>Updated</b> 9 Oct 2026<br><b>Sources</b> Kadaster koopsominformatie, NEN 2580 floor plans, Funda and Huurmatcher listings<br><b>Not</b> a valuation or financial advice</p>
+    </div>
     <div class="kpis" id="kpis"></div>
   </header>
 
-  <section class="viewer" aria-label="3D building model">
+  <section class="viewer" aria-label="3D building model" id="model">
     <div class="stage" id="stage">
       <div class="toolbar">
         <div class="seg" role="group" aria-label="Colour by" id="modes">
@@ -185,7 +223,7 @@ td.est{color:var(--muted);font-style:italic}
     </aside>
   </section>
 
-  <section style="display:grid;gap:18px">
+  <section style="display:grid;gap:18px" id="findings-sec">
     <h2>What drives the price</h2>
     <div class="findings" id="findings"></div>
   </section>
@@ -210,7 +248,7 @@ td.est{color:var(--muted);font-style:italic}
     </div>
   </section>
 
-  <section style="display:grid;gap:12px">
+  <section style="display:grid;gap:12px" id="units">
     <h2>All 80 units</h2>
     <p class="lede" style="font-size:14px">Units without a recorded transfer show a model estimate in grey italics. Click a column to sort, or a row to find the unit in the model.</p>
     <div class="filternote" id="tblNote" hidden></div>
@@ -224,11 +262,13 @@ td.est{color:var(--muted);font-style:italic}
     <div class="tablewrap"><table id="rentTbl" style="min-width:640px"><thead></thead><tbody></tbody></table></div>
   </section>
 
-  <!-- Support section: add back with a real donation link
-  <section class="notes" id="support"><h3>Support this page</h3><p>This page is free. If it helped you, you can buy us a coffee: <a class="chip" href="DONATION_LINK" target="_blank" rel="noopener">Donate</a></p></section>
-  -->
+  <section class="notes" id="donate">
+    <h3>Support this page</h3>
+    <p>No ads and no paywall: this page is kept free by the few people who chip in. If it saved you time or helped you negotiate, the price of a cup of tea really makes a difference. Completely voluntary, any amount is welcome. <a class="chip" href="https://tikkie.me/pay/ctec4ashccrpvqi10enb" target="_blank" rel="noopener">Buy us a cup of tea via Tikkie</a></p>
+    <p style="font-size:12px;color:var(--muted)">The Tikkie link is valid until 23 October 2026.</p>
+  </section>
 
-  <section class="notes">
+  <section class="notes" id="sources">
     <h3>How this was built</h3>
     <p><b>Sources.</b> Areas are NEN 2580 usable floor areas (GBO) from <i>NEN2580 type B meting Bergaus A6</i>. Sale prices and dates come from Kadaster <i>koopsominformatie</i> for postcode 1062 LE (49 transfers, Jul 2025 – Aug 2026). The 80 units match the 80 apartment rights (272–351) on floors 5–12 in <i>Concept splitsingstekening A6</i>.</p>
     <p><b>Duplexes.</b> W3/W3A and W4 span two floors. Their area is the sum of both levels, for example W3 = 34.15 m² entrance level + 68.07 m² upper level. For the model they count as the floor in between (e.g. 7.5).</p>
@@ -266,6 +306,10 @@ window.BERGHAUS_RENT = [
 // Rental block from the NEN 2580 plans: [houseNo, type, GBO m², floor, x0, x1, z0, z1, roundedCorner, inferred]
 // Floors 5-12: rental tower; floors 1-4: ring around the courtyard (positions schematic, from the plan labels).
 window.BERGHAUS_OTHER = [[393,"W1",63.63,5,-40.4,-34.1,-19,-11.5,"x0z0",0],[395,"W1",63.79,5,-31.9,-25.6,-19,-11.5,"x1z0",0],[397,"W6E",51.16,5,-32.1,-26.4,-11.5,-5.75,"",0],[399,"W6",51.45,5,-32.1,-26.4,-5.75,0.0,"",0],[401,"W6",51.45,5,-32.1,-26.4,0.0,5.75,"",0],[403,"W6E",51.16,5,-32.1,-26.4,5.75,11.5,"",0],[405,"W2",78.91,5,-31.9,-25.6,11.5,19,"x1z1",0],[407,"W2",78.91,5,-40.4,-34.1,11.5,19,"x0z1",0],[409,"W6D",60.38,5,-39.6,-33.9,5.75,11.5,"",0],[411,"W6D",60.38,5,-39.6,-33.9,0.0,5.75,"",0],[413,"W6D",60.38,5,-39.6,-33.9,-5.75,0.0,"",0],[415,"W6C",60.38,5,-39.6,-33.9,-11.5,-5.75,"",0],[417,"W1",63.63,6,-40.4,-34.1,-19,-11.5,"x0z0",0],[419,"W1",63.79,6,-31.9,-25.6,-19,-11.5,"x1z0",0],[421,"W6E",51.16,6,-32.1,-26.4,-11.5,-5.75,"",0],[423,"W6",51.45,6,-32.1,-26.4,-5.75,0.0,"",0],[425,"W6",51.45,6,-32.1,-26.4,0.0,5.75,"",0],[427,"W6E",51.16,6,-32.1,-26.4,5.75,11.5,"",0],[429,"W2",78.91,6,-31.9,-25.6,11.5,19,"x1z1",0],[431,"W2",78.91,6,-40.4,-34.1,11.5,19,"x0z1",0],[433,"W6C",60.38,6,-39.6,-33.9,5.75,11.5,"",0],[435,"W6C",60.38,6,-39.6,-33.9,0.0,5.75,"",0],[437,"W6C",60.38,6,-39.6,-33.9,-5.75,0.0,"",0],[439,"W6C",60.38,6,-39.6,-33.9,-11.5,-5.75,"",0],[441,"W1",63.63,7,-40.4,-34.1,-19,-11.5,"x0z0",0],[443,"W1",63.79,7,-31.9,-25.6,-19,-11.5,"x1z0",0],[445,"W6E",51.16,7,-32.1,-26.4,-11.5,-5.75,"",0],[447,"W6",51.45,7,-32.1,-26.4,-5.75,0.0,"",0],[449,"W6",51.45,7,-32.1,-26.4,0.0,5.75,"",0],[451,"W6E",51.16,7,-32.1,-26.4,5.75,11.5,"",0],[453,"W2",78.91,7,-31.9,-25.6,11.5,19,"x1z1",0],[455,"W2",78.91,7,-40.4,-34.1,11.5,19,"x0z1",0],[457,"W6C",60.38,7,-39.6,-33.9,5.75,11.5,"",0],[459,"W6C",60.38,7,-39.6,-33.9,0.0,5.75,"",0],[461,"W6C",60.38,7,-39.6,-33.9,-5.75,0.0,"",0],[463,"W6C",60.38,7,-39.6,-33.9,-11.5,-5.75,"",0],[465,"W1",63.63,8,-40.4,-34.1,-19,-11.5,"x0z0",0],[467,"W1",63.79,8,-31.9,-25.6,-19,-11.5,"x1z0",0],[469,"W6E",51.16,8,-32.1,-26.4,-11.5,-5.75,"",0],[471,"W6",51.45,8,-32.1,-26.4,-5.75,0.0,"",0],[473,"W6",51.45,8,-32.1,-26.4,0.0,5.75,"",1],[475,"W6E",51.16,8,-32.1,-26.4,5.75,11.5,"",0],[477,"W2",78.91,8,-31.9,-25.6,11.5,19,"x1z1",0],[479,"W2",78.91,8,-40.4,-34.1,11.5,19,"x0z1",0],[481,"W6C",60.38,8,-39.6,-33.9,5.75,11.5,"",0],[483,"W6C",60.38,8,-39.6,-33.9,0.0,5.75,"",1],[485,"W6C",60.38,8,-39.6,-33.9,-5.75,0.0,"",0],[487,"W6C",60.38,8,-39.6,-33.9,-11.5,-5.75,"",0],[489,"W1",63.63,9,-40.4,-34.1,-19,-11.5,"x0z0",0],[491,"W1",63.79,9,-31.9,-25.6,-19,-11.5,"x1z0",0],[493,"W6E",51.16,9,-32.1,-26.4,-11.5,-5.75,"",0],[495,"W6",51.45,9,-32.1,-26.4,-5.75,0.0,"",0],[497,"W6",51.45,9,-32.1,-26.4,0.0,5.75,"",1],[499,"W6E",81.0,9,-32.1,-26.4,5.75,11.5,"",0],[501,"W2",78.91,9,-31.9,-25.6,11.5,19,"x1z1",0],[503,"W2",78.91,9,-40.4,-34.1,11.5,19,"x0z1",0],[505,"W6C",60.38,9,-39.6,-33.9,5.75,11.5,"",0],[507,"W6C",60.38,9,-39.6,-33.9,0.0,5.75,"",0],[509,"W6C",60.38,9,-39.6,-33.9,-5.75,0.0,"",0],[511,"W6C",60.38,9,-39.6,-33.9,-11.5,-5.75,"",0],[513,"W1",63.63,10,-40.4,-34.1,-19,-11.5,"x0z0",0],[515,"W1",63.79,10,-31.9,-25.6,-19,-11.5,"x1z0",0],[517,"W6E",51.16,10,-32.1,-26.4,-11.5,-5.75,"",0],[519,"W6",51.45,10,-32.1,-26.4,-5.75,0.0,"",0],[521,"W6",51.45,10,-32.1,-26.4,0.0,5.75,"",1],[523,"W6E",51.16,10,-32.1,-26.4,5.75,11.5,"",0],[525,"W2",78.91,10,-31.9,-25.6,11.5,19,"x1z1",0],[527,"W2",78.91,10,-40.4,-34.1,11.5,19,"x0z1",0],[529,"W6C",60.38,10,-39.6,-33.9,5.75,11.5,"",0],[531,"W6C",60.38,10,-39.6,-33.9,0.0,5.75,"",1],[533,"W6C",60.38,10,-39.6,-33.9,-5.75,0.0,"",0],[535,"W6C",60.38,10,-39.6,-33.9,-11.5,-5.75,"",0],[537,"W1",63.63,11,-40.4,-34.1,-19,-11.5,"x0z0",0],[539,"W1",63.79,11,-31.9,-25.6,-19,-11.5,"x1z0",0],[541,"W6E",51.16,11,-32.1,-26.4,-11.5,-5.75,"",0],[543,"W6",51.45,11,-32.1,-26.4,-5.75,0.0,"",0],[545,"W6",51.45,11,-32.1,-26.4,0.0,5.75,"",1],[547,"W6E",51.16,11,-32.1,-26.4,5.75,11.5,"",0],[549,"W2",78.91,11,-31.9,-25.6,11.5,19,"x1z1",0],[551,"W2",78.91,11,-40.4,-34.1,11.5,19,"x0z1",0],[553,"W6C",60.38,11,-39.6,-33.9,5.75,11.5,"",0],[555,"W6C",60.38,11,-39.6,-33.9,0.0,5.75,"",0],[557,"W6C",60.38,11,-39.6,-33.9,-5.75,0.0,"",0],[559,"W6C",60.38,11,-39.6,-33.9,-11.5,-5.75,"",0],[561,"W1",63.63,12,-40.4,-34.1,-19,-11.5,"x0z0",0],[563,"W1",63.79,12,-31.9,-25.6,-19,-11.5,"x1z0",0],[565,"W6E",51.16,12,-32.1,-26.4,-11.5,-5.75,"",0],[567,"W6",51.45,12,-32.1,-26.4,-5.75,0.0,"",0],[569,"W6",51.45,12,-32.1,-26.4,0.0,5.75,"",1],[571,"W6E",51.16,12,-32.1,-26.4,5.75,11.5,"",0],[573,"W2",78.91,12,-31.9,-25.6,11.5,19,"x1z1",0],[575,"W2",78.91,12,-40.4,-34.1,11.5,19,"x0z1",0],[577,"W6C",60.38,12,-39.6,-33.9,5.75,11.5,"",0],[579,"W6C",60.38,12,-39.6,-33.9,0.0,5.75,"",1],[581,"W6C",60.38,12,-39.6,-33.9,-5.75,0.0,"",0],[583,"W6C",60.38,12,-39.6,-33.9,-11.5,-5.75,"",0],[281,"W12",71.09,1,-42.0,-33.17,-19.5,-11.5,"",0],[283,"W10",53.31,1,-33.17,-26.55,-19.5,-11.5,"",0],[285,"W9",46.4,1,-26.55,-20.78,-19.5,-11.5,"",0],[11,"W9",46.4,1,-20.78,-15.02,-19.5,-11.5,"",0],[13,"W10",53.31,1,-15.02,-8.4,-19.5,-11.5,"",0],[15,"W7A",40.02,1,-14.2,-8.4,-11.5,-6.47,"",0],[17,"W6",51.42,1,-14.2,-8.4,-6.47,-0.0,"",0],[19,"W6",51.42,1,-14.2,-8.4,-0.0,6.47,"",0],[21,"W7A",40.02,1,-14.2,-8.4,6.47,11.5,"",0],[299,"W13",84.42,1,-42.0,-35.69,11.5,19.5,"",0],[297,"W11",67.02,1,-35.69,-30.69,11.5,19.5,"",0],[295,"W9",46.4,1,-30.69,-27.22,11.5,19.5,"",0],[31,"W9",46.4,1,-27.22,-23.76,11.5,19.5,"",0],[29,"W9A",46.4,1,-23.76,-20.29,11.5,19.5,"",0],[27,"W9",46.4,1,-20.29,-16.82,11.5,19.5,"",0],[25,"W9",46.4,1,-16.82,-13.36,11.5,19.5,"",0],[23,"W11A",66.37,1,-13.36,-8.4,11.5,19.5,"",0],[287,"W7A",40.02,1,-35.2,-29.4,-11.5,-6.47,"",0],[289,"W6",51.42,1,-35.2,-29.4,-6.47,-0.0,"",0],[291,"W6",51.42,1,-35.2,-29.4,-0.0,6.47,"",0],[293,"W7A",40.02,1,-35.2,-29.4,6.47,11.5,"",0],[307,"W6B",59.0,1,-42.0,-36.2,-11.5,-5.75,"",0],[305,"W6B",59.0,1,-42.0,-36.2,-5.75,0.0,"",0],[303,"W6B",59.0,1,-42.0,-36.2,0.0,5.75,"",0],[301,"W6B",59.0,1,-42.0,-36.2,5.75,11.5,"",0],[309,"W12",71.09,2,-42.0,-36.17,-19.5,-11.5,"",0],[311,"W10",53.31,2,-36.17,-31.8,-19.5,-11.5,"",0],[313,"W9",46.4,2,-31.8,-27.99,-19.5,-11.5,"",0],[33,"W9",46.4,2,-27.99,-24.19,-19.5,-11.5,"",0],[35,"W9A",46.4,2,-24.19,-20.38,-19.5,-11.5,"",0],[37,"W9",46.4,2,-20.38,-16.58,-19.5,-11.5,"",0],[39,"W9",46.4,2,-16.58,-12.77,-19.5,-11.5,"",0],[41,"W10",53.31,2,-12.77,-8.4,-19.5,-11.5,"",0],[43,"W7A",40.02,2,-14.2,-8.4,-11.5,-4.6,"",0],[45,"W6",51.42,2,-14.2,-8.4,-4.6,4.26,"",0],[47,"W6",2.0,2,-14.2,-8.4,4.26,4.6,"",0],[49,"W7A",40.02,2,-14.2,-8.4,4.6,11.5,"",0],[327,"W13",84.42,2,-42.0,-34.99,11.5,19.5,"",0],[325,"W11",67.02,2,-34.99,-29.42,11.5,19.5,"",0],[323,"W9",1.0,2,-29.42,-29.33,11.5,19.5,"",0],[59,"W9",46.4,2,-29.33,-25.48,11.5,19.5,"",0],[57,"W9A",46.4,2,-25.48,-21.62,11.5,19.5,"",0],[55,"W9",46.4,2,-21.62,-17.77,11.5,19.5,"",0],[53,"W9",46.4,2,-17.77,-13.91,11.5,19.5,"",0],[51,"W11A",66.37,2,-13.91,-8.4,11.5,19.5,"",0],[315,"W7A",40.02,2,-35.2,-29.4,-11.5,-6.47,"",0],[317,"W6",51.42,2,-35.2,-29.4,-6.47,-0.0,"",0],[319,"W6",51.42,2,-35.2,-29.4,-0.0,6.47,"",0],[321,"W7A",40.02,2,-35.2,-29.4,6.47,11.5,"",0],[335,"W6B",59.0,2,-42.0,-36.2,-11.5,-4.16,"",0],[333,"W6B",59.0,2,-42.0,-36.2,-4.16,3.17,"",0],[331,"W6B",8.0,2,-42.0,-36.2,3.17,4.16,"",0],[329,"W6B",59.0,2,-42.0,-36.2,4.16,11.5,"",0],[337,"W12",71.09,3,-42.0,-36.17,-19.5,-11.5,"",0],[339,"W10",53.31,3,-36.17,-31.8,-19.5,-11.5,"",0],[341,"W9",46.4,3,-31.8,-27.99,-19.5,-11.5,"",0],[61,"W9",46.4,3,-27.99,-24.19,-19.5,-11.5,"",0],[63,"W9A",46.4,3,-24.19,-20.38,-19.5,-11.5,"",0],[65,"W9",46.4,3,-20.38,-16.58,-19.5,-11.5,"",0],[67,"W9",46.4,3,-16.58,-12.77,-19.5,-11.5,"",0],[69,"W10",53.31,3,-12.77,-8.4,-19.5,-11.5,"",0],[71,"W7",40.02,3,-14.2,-8.4,-11.5,-6.47,"",0],[73,"W6",51.42,3,-14.2,-8.4,-6.47,-0.0,"",0],[75,"W6",51.42,3,-14.2,-8.4,-0.0,6.47,"",0],[77,"W7",40.02,3,-14.2,-8.4,6.47,11.5,"",0],[355,"W13",84.42,3,-42.0,-35.69,11.5,19.5,"",0],[353,"W11",67.02,3,-35.69,-30.69,11.5,19.5,"",0],[351,"W9",46.4,3,-30.69,-27.22,11.5,19.5,"",0],[87,"W9",46.4,3,-27.22,-23.76,11.5,19.5,"",0],[85,"W9A",46.4,3,-23.76,-20.29,11.5,19.5,"",0],[83,"W9",46.4,3,-20.29,-16.82,11.5,19.5,"",0],[81,"W9",46.4,3,-16.82,-13.36,11.5,19.5,"",0],[79,"W11A",66.37,3,-13.36,-8.4,11.5,19.5,"",0],[343,"W7",40.02,3,-35.2,-29.4,-11.5,-6.47,"",0],[345,"W6",51.42,3,-35.2,-29.4,-6.47,-0.0,"",0],[347,"W6",51.42,3,-35.2,-29.4,-0.0,6.47,"",0],[349,"W7",40.02,3,-35.2,-29.4,6.47,11.5,"",0],[363,"W6B",59.0,3,-42.0,-36.2,-11.5,-5.75,"",0],[361,"W6B",59.0,3,-42.0,-36.2,-5.75,0.0,"",0],[359,"W6B",59.0,3,-42.0,-36.2,0.0,5.75,"",0],[357,"W6B",59.0,3,-42.0,-36.2,5.75,11.5,"",0],[365,"W15",44.35,4,-42.0,-38.11,-19.5,-11.5,"",0],[367,"W10",53.31,4,-38.11,-33.43,-19.5,-11.5,"",0],[369,"W9",46.4,4,-33.43,-29.36,-19.5,-11.5,"",0],[89,"W9",46.4,4,-29.36,-25.29,-19.5,-11.5,"",0],[91,"W9A",46.4,4,-25.29,-21.22,-19.5,-11.5,"",0],[93,"W9",46.4,4,-21.22,-17.15,-19.5,-11.5,"",0],[95,"W9",46.4,4,-17.15,-13.08,-19.5,-11.5,"",0],[97,"W10",53.31,4,-13.08,-8.4,-19.5,-11.5,"",0],[99,"W7",40.0,4,-14.2,-8.4,-11.5,-6.44,"",0],[101,"W6",50.88,4,-14.2,-8.4,-6.44,-0.0,"",0],[103,"W6",50.88,4,-14.2,-8.4,-0.0,6.44,"",0],[105,"W7",40.02,4,-14.2,-8.4,6.44,11.5,"",0],[383,"W14",58.23,4,-42.0,-37.38,11.5,19.5,"",0],[381,"W11",67.02,4,-37.38,-32.07,11.5,19.5,"",0],[379,"W9",46.4,4,-32.07,-28.39,11.5,19.5,"",0],[115,"W9",46.4,4,-28.39,-24.71,11.5,19.5,"",0],[113,"W9A",46.4,4,-24.71,-21.02,11.5,19.5,"",0],[111,"W9",46.4,4,-21.02,-17.34,11.5,19.5,"",0],[109,"W9",46.4,4,-17.34,-13.66,11.5,19.5,"",0],[107,"W11A",66.37,4,-13.66,-8.4,11.5,19.5,"",0],[371,"W7",40.02,4,-35.2,-29.4,-11.5,-6.47,"",0],[373,"W6",51.42,4,-35.2,-29.4,-6.47,-0.0,"",0],[375,"W6",51.42,4,-35.2,-29.4,-0.0,6.47,"",0],[377,"W7",40.02,4,-35.2,-29.4,6.47,11.5,"",0],[391,"W6B",59.0,4,-42.0,-36.2,-11.5,-5.75,"",0],[389,"W6B",59.0,4,-42.0,-36.2,-5.75,0.0,"",0],[387,"W6B",59.0,4,-42.0,-36.2,0.0,5.75,"",0],[385,"W6B",59.0,4,-42.0,-36.2,5.75,11.5,"",0]];
+</script>
+<script>
+// The Tikkie request expires on 23 Oct 2026; hide the donation UI after that so nobody hits a dead link.
+if (Date.now() > Date.parse('2026-10-23T21:00:00+02:00')) ['donateBanner','donate','donNav'].forEach(id=>{const e=document.getElementById(id); if(e) e.hidden=true;});
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
